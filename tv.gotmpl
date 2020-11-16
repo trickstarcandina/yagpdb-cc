@@ -1,0 +1,49 @@
+{{$channel := 763256909494091796}}
+{{ $args := parseArgs 0 "" 
+    (carg "string" "message") }}
+{{$user := .User}}
+{{if .Message.Attachments}}
+{{$Attachment := index .Message.Attachments 0}}
+    {{range .Message.Attachments}}
+    {{$msgEmbed := cembed 
+        "description" (joinStr "" "Được gửi bởi "  $user.Mention)
+        "image" (sdict "url" .ProxyURL)  
+        "color" 16763904}}
+{{/*
+    {{ if $args.IsSet 0 }}
+        {{sendMessage $channel ($args.Get 0)}}
+    {{else}}
+        {{sendMessage $channel ""}}
+    {{end}}
+*/}}
+    {{sendMessage $channel $msgEmbed}}
+    {{end}}
+{{if (reFind "(.jpg|.jpeg|.png|.gif|.tif|.tiff|.mp4)$" $Attachment.Filename)}}
+{{deleteTrigger 20}}
+{{end}}
+{{end}}
+ {{/*Code by TrickStar*/}}
+{{if (reFind `(?:^|\s)https://(?:www\.)?tenor\.com/` .Message.Content)}}
+{{deleteTrigger 20}}
+{{end}}
+
+
+{{/*Code by TrickStar*/}}
+{{$args := parseArgs 0 "Lỗi rùi gõ : -send <kênh> <nội dung>"
+    (carg "channel" "kênh")
+    (carg "string" "nội dung")}}
+
+{{if .Message.Attachments}}
+    {{range .Message.Attachments}}
+    {{$msgEmbed := cembed 
+        "image" (sdict "url" .ProxyURL)  
+        "color" 16763904}}
+        {{sendMessage ($args.Get 0).ID ($args.Get 1)}}
+        {{sendMessage ($args.Get 0).ID $msgEmbed}}
+    
+{{end}}
+{{else}}
+    {{sendMessage ($args.Get 0).ID ($args.Get 1)}}
+{{end}}
+
+{{deleteTrigger 1}}
