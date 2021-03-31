@@ -1,0 +1,10 @@
+{{/*Code by TrickStar
+Trigger type : Command
+*/}}
+{{$n := .User.Username}}{{$t := "Username"}}
+{{if .Member.Nick}}
+{{$n = .Member.Nick}}{{$t = "Nickname"}}
+{{end}}
+{{$args:= (joinStr " " (slice .CmdArgs))}}
+{{editNickname $args}}
+{{sendDM (joinStr "" "Your nickname has been changed to =" $args "=  from:  =" $n "= .")}}
