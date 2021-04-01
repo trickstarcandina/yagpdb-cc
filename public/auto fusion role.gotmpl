@@ -1,0 +1,34 @@
+{{if not (targetHasRoleID .User.ID 796446850139422730) }} 
+{{if and (targetHasRoleID .User.ID 826845865640722444) (targetHasRoleID .User.ID 773561793997045792)}} 
+{{giveRoleID .User.ID 796446850139422730}}
+{{end}}
+
+{{else if not (targetHasRoleID .User.ID 773967619627155477) }} 
+{{if and (targetHasRoleID .User.ID 773964150907994194) (targetHasRoleID .User.ID 773964157115432980)}} 
+{{giveRoleID .User.ID 773967619627155477}}
+{{end}}
+
+{{else if not (targetHasRoleID .User.ID 796446848851378236) }} 
+{{if and (targetHasRoleID .User.ID 773964172256870401) (targetHasRoleID .User.ID 773967616812253185)}} 
+{{giveRoleID .User.ID 796446848851378236}} 
+{{end}}
+
+{{else if not (targetHasRoleID .User.ID 794461290272653322) }} 
+{{if and (targetHasRoleID .User.ID 773964166200950804) (targetHasRoleID .User.ID 796446847953535048) (targetHasRoleID .User.ID 773967619232628766 )}} 
+{{giveRoleID .User.ID 794461290272653322}} 
+{{end}}
+
+{{else if not (targetHasRoleID .User.ID 783008764302327849) }} 
+{{if and (targetHasRoleID .User.ID 826503500737282060) (targetHasRoleID .User.ID 826641694945574953)}} 
+{{giveRoleID .User.ID 783008764302327849}} 
+{{end}}
+
+{{end}}
+
+{{/*
+trà chanh 826845865640722444    trà đào 773561793997045792  green tea 	796446850139422730
+milk coffee 773964150907994194  egg	773964157115432980      cappu		773967619627155477
+macaron 773964172256870401      tira	773967616812253185    bánh ngọt	796446848851378236
+rosaceae 773964166200950804     yogurt 796446847953535048   ice	773967619232628766        smoothie	794461290272653322
+rose tea 826503500737282060     mint	826641694945574953    heineiken	783008764302327849
+*/}}
