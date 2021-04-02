@@ -1,0 +1,18 @@
+{{/*Code by TrickStar
+Trigger type : Command
+Ex:<prefix>vote
+*/}}
+{{ $avatar := (joinStr "" "https://cdn.discordapp.com/avatars/" (toString .User.ID) "/" .User.Avatar ".png") }} 
+{{$embed := cembed 
+    "title" (joinStr "" "`(～￣▽￣)～ « VOTE » (～￣▽￣)～`") 
+    "description" (joinStr " " "Vote" .CmdArgs )
+    
+    "color" 10181046
+    "author" (sdict "name" "FromSaga☆withLove" "icon_url" "https://cdn.discordapp.com/emojis/669378067877199887.png?v=1") 
+    "thumbnail" (sdict "url" "https://i.imgur.com/29bDH6Y.gif") 
+ 
+}}
+ 
+{{$msg := sendMessageRetID nil $embed}}
+{{addMessageReactions nil $msg "👍" "👎"}}
+{{ deleteTrigger 0 }}

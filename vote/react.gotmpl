@@ -1,0 +1,87 @@
+{{/*Code by TrickStar
+Trigger type : Reaction
+Added reactions only
+*/}}
+{{$upvote :="👍"}}
+{{$downvote :="👎"}}
+{{$notify := 608742469844205695}}
+
+{{$embed:= sdict}}
+{{$mID := .ReactionMessage.ID}}
+{{$rName := .Reaction.Emoji.Name}}
+{{$oldfield := ""}}
+{{$stats := ""}}
+ 
+{{$uVote := 0}}
+{{$dVote := 0}}
+{{$count := 0}}
+ 
+{{range .ReactionMessage.Reactions}}
+    {{if eq .Emoji.Name (toString $upvote)}}
+        {{$uVote = .Count}}
+    {{else if eq .Emoji.Name (toString $downvote)}}
+        {{$dVote = .Count}}
+    {{end}}
+{{end}}
+ 
+{{if .Message.Embeds}}
+    {{$embed = structToSdict (index .Message.Embeds 0)}}
+    {{range $k, $v := $embed}}{{if eq (kindOf $v true) `struct`}}{{$embed.Set $k (structToSdict $v)}}{{end}}{{end}}
+{{end}}
+{{if $embed.Author}}{{$embed.Author.Set `Icon_URL` $embed.Author.IconURL}}{{end}}
+{{if $embed.Footer}}{{$embed.Footer.Set `Icon_URL` $embed.Footer.IconURL}}{{end}}
+{{if $embed.Fields}}
+	{{$oldfield = (index $embed.Fields 0).Value}}	
+{{end}}
+
+{{$uVote := sub $uVote 1}}
+{{$dVote := sub $dVote 1}}
+{{$tVote := add $uVote $dVote}}
+{{$count = mult (fdiv $uVote $tVote) 100 | printf "%.2f"}}
+{{if le $tVote 0}}
+	{{$tVote = 0}}
+	{{$count = 0}}
+{{end}}
+{{$msg := joinStr "" $tVote " votes  - " $count "% agree"}}
+{{if $oldfield}}
+	{{$msg = $oldfield}}
+{{end}}
+ 
+{{if eq $rName $upvote }}
+	{{deleteMessageReaction nil $mID .User.ID $downvote}}
+	{{if and (eq $uVote 10) (eq $embed.Color 28859) }}
+		{{sendMessage $notify (cembed
+       		"author" (sdict "name" $embed.Author.Name "icon_url" $embed.Author.IconURL)
+			"description" $embed.Description
+			"footer" $embed.Footer 
+			"fields" (cslice 
+				(sdict "name" "10 upvotes reached" "value" $msg "inline" false) ))}}
+	{{ $embed.Set "color" 15820904 }}
+    	{{ editMessage nil $mID (cembed $embed) }}
+	{{end}}
+{{else if eq $rName $downvote}}
+	{{deleteMessageReaction nil $mID .User.ID $upvote}}
+{{else if eq $rName "🔚"}}
+	{{deleteAllMessageReactions  nil $mID}}
+	{{$stats := joinStr ""  "Kết quả được chấp nhận bởi " .User.String }}
+	{{ $embed.Set "color" 5294200 }}
+   	{{ $embed.Set "fields"   (cslice (sdict "name" $stats "value" $msg "inline" false )) }}
+    	{{ editMessage nil $mID (cembed $embed) }}
+{{else if eq $rName "🔙"}}
+	{{deleteAllMessageReactions  nil $mID}}
+	{{$stats := joinStr ""  "Kết quả không được chấp nhận bởi " .User.String }}
+	{{ $embed.Set "color" 0xDC143C }}
+   	{{ $embed.Set "fields"   (cslice (sdict "name" $stats "value" $msg "inline" false )) }}
+    	{{ editMessage nil $mID (cembed $embed) }}
+{{else if eq $rName "🔛"}}
+	{{deleteAllMessageReactions  nil $mID}}
+	{{ $embed.Set "color" 0xDC143C }}
+   	{{ $embed.Set "fields"   (cslice (sdict "name" "HỦY VOTE" "value" "Vote này thật vô nghĩa" "inline" false )) }}
+        {{ editMessage nil $mID (cembed $embed) }}
+{{else if eq $rName "🔝"}}
+    {{deleteAllMessageReactions  nil $mID}}
+	{{$stats := joinStr "" "✨Mày không thoát được đâu con trai✨" }}
+	{{ $embed.Set "color" 16776960 }}
+   	{{ $embed.Set "fields"   (cslice (sdict "name" $stats "value" "Vote này thật toẹt vời" "inline" false )) }}
+        {{ editMessage nil $mID (cembed $embed) }}
+{{end}}
