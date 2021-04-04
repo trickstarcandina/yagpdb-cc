@@ -1,0 +1,85 @@
+{{/*
+	Regex trigger  `^-(leveling|(level|lvl)-?conf|(level|lvl)-?settings)`.
+*/}}
+{{ $helpMessage := cembed
+	"title" "Leveling"
+	"description" (joinStr "\n\n"
+		"`leveling use-default`: settings mặc định"
+		"`leveling set <key> <value>`: Sets thời gian spam. ví dụ:-leveling set cooldown 1 minute 30 seconds (spam ngoài 1 phút 30 giây thì sẽ được tính xp)  Valid keys are \"min\", \"max\", and \"cooldown\" (duration)."
+		"`leveling set-channel <channel|none>`: Sets kênh gửi tin nhắn ai đó lên cấp (mặc định là kênh hiện tại). Nếu muốn là kênh hiện tại thì dùng `leveling set-channel none`."
+		"`leveling view`: Xem settings."
+	)
+	"color" 14232643
+}}
+{{ if .CmdArgs }}
+	{{ $saved := false }} 
+	{{ $nowSetting := sdict 
+		"min" 15 
+		"max" 25 
+		"cooldown" .TimeMinute
+	}} 
+	{{ with (dbGet 0 "xpSettings") }}
+		{{ $saved = true }}
+		{{ $nowSetting = sdict .Value }} 
+	{{ end }}
+ 
+	{{ if eq (index .CmdArgs 0) "use-default" }}
+		{{ $s := dbSet 0 "xpSettings" $nowSetting }} 
+		Ok! Bạn có thể dùng default settings cho leveling system.
+	
+	{{ else if and (eq (index .CmdArgs 0) "set") (ge (len .CmdArgs) 3) }}
+		{{ $key := index .CmdArgs 1 }} 
+		{{ $value := slice .CmdArgs 2 | joinStr " " }} 
+		{{ if in (cslice "min" "max" "cooldown") $key }} 
+			{{ $parse := or (and (eq $key "cooldown") (toDuration $value)) (toInt $value) }} 
+			{{ if not $parse }} 
+				Vui lòng nhập đúng định dạng cho key `{{ $key }}`.
+			{{ else }}
+				{{ $nowSetting.Set $key $parse }} 
+				{{ if ge $nowSetting.min $nowSetting.max }} 
+					The minimum xp không được lớn hơn hoặc bằng the max xp.
+				{{ else }}
+					{{ $s := dbSet 0 "xpSettings" $nowSetting }}
+					Thiết lập thành công key `{{ $key }}` to `{{ $value }}`!
+				{{ end }}
+			{{ end }}
+		{{ else }}
+			Đây là 1 key không hợp lệ. Chỉ có các key sau đây mà thôi "min", "max", and "cooldown".
+		{{ end }}
+ 
+	{{ else if and (eq (index .CmdArgs 0) "set-channel") (ge (len .CmdArgs) 2) }}
+		{{ $input := index .CmdArgs 1 }}
+		{{ with reFindAllSubmatches `<#(\d+)>` $input }} {{ $input = toInt64 (index . 0 1) }} {{ end }}
+		{{ $channel := getChannel $input }}
+		{{ if $channel }}
+			{{ $nowSetting.Set "channel" $channel.ID }}
+			{{ $s := dbSet 0 "xpSettings" $nowSetting }}
+			Thiết lập kênh thông báo level up thành công. <#{{ $channel.ID }}>!
+		{{ else if eq $input "none" }}
+			{{ $nowSetting.Del "channel" }}
+			{{ $s := dbSet 0 "xpSettings" $nowSetting }}
+			Thiết lập không có kênh thông báo level up thành công. 
+		{{ else }}
+			Không nhận dạng được kênh. Hãy thử lại. 
+		{{ end }}
+ 
+	{{ else if eq (index .CmdArgs 0) "view" }}
+		{{ $channel := "*None set*" }}
+		{{ with $nowSetting.channel }} {{ $channel = printf "<#%d>" . }} {{ end }}
+		{{ $formatted := printf "**❯ Min XP:** %d\n**❯ Max XP:** %d\n**❯ Cooldown:** %s\n**❯ Level-up Channel:** %s"
+			$nowSetting.min
+			$nowSetting.max
+			(humanizeDurationSeconds ($nowSetting.cooldown | toDuration)) 
+			$channel
+		}} 
+		{{ if $saved }} 
+			{{ sendMessage nil (cembed "title" "Level Settings" "description" $formatted "thumbnail" (sdict "url" "https://i.pinimg.com/originals/5f/8f/35/5f8f35f1bbd00e354a0a071d06fcb2ce.gif")) }}
+		{{ else }}
+		    Server chưa thiết lập hệ thống level. Run `-leveling use-default` để sử dụng cài đặt mặc định hoặc tùy chỉnh nó bằng cách sử dụng` -leveling set <key> <value> `.
+		{{ end }}
+	{{ else }} 
+		{{ sendMessage nil $helpMessage }} 
+	{{ end }}
+{{ else }}
+	{{ sendMessage nil $helpMessage }}
+{{ end }}

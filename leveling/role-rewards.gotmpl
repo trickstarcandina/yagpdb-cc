@@ -1,0 +1,100 @@
+{{/*
+	Recommended trigger: Regex trigger with trigger `^-(role-?rewards|rr)`
+*/}}
+{{ $helpMessage := cembed
+	"title" "🏆 Role Rewards"
+	"description" (joinStr "\n\n"
+		"`rolerewards add <level> <role>`: Thêm role lúc lên được 1 cấp nhất định"
+		"`rolerewards remove <level>`: Xóa role lúc lên được 1 cấp nhất định"
+		"`rolerewards set-type <highest|stack>`: Set role theo kiểu... Highest nghĩa là chỉ nhận được 1 role cao nhất <=> cấp độ hiện tại. Stack là là nhận tất cả role .Cái highest có thể có bug"
+		"`rolerewards reset`: Resets role"
+		"`rolerewards view`: Xem settings for role rewards."
+	)
+	"color" 14232643
+}}
+{{ if .CmdArgs }}
+	{{ $roleRewards := sdict "type" "stack" }}
+	{{ with (dbGet 0 "roleRewards") }}
+		{{ $roleRewards = sdict .Value }} 
+	{{ end }}
+	{{ $cmd := index .CmdArgs 0 }} 
+ 
+	{{ if and (eq $cmd "add") (ge (len .CmdArgs) 3) }}
+		{{ $level := index .CmdArgs 1 | toInt }} 
+		{{ $input := slice .CmdArgs 2 | joinStr " " | lower }} 
+ 
+		{{ $exactRole := 0 }}
+		{{ $maybeRole := 0 }}
+		
+		{{ with reFindAllSubmatches `^<@&(\d{17,19})>|(\d{17,19})$` $input }}
+			{{ $id := toInt (or (index . 0 1) (index . 0 2)) }}
+			{{ range $.Guild.Roles }}
+				{{- if eq .ID $id }} {{ $exactRole = . }} {{ end -}}
+			{{ end }}
+		{{ else }}
+			{{ range .Guild.Roles }}
+				{{- if eq (lower .Name) (lower $input) }} {{ $exactRole = . }}
+				{{- else if inFold (lower .Name) (lower $input) }} {{ $maybeRole = . }}
+				{{- end -}}
+			{{ end }}
+		{{ end }}
+ 
+		{{ $role := or $exactRole $maybeRole }}
+		{{ if and $level $role }}
+			{{ if and (ge $level 1) (le $level 200) }} 
+				{{ $roleRewards.Set (str $level) $role.ID }}
+				{{ $s := dbSet 0 "roleRewards" $roleRewards }} 
+				Set the role `{{ $role.Name }}` to be given at the level `{{ $level }}`.
+			{{ else }}
+				Sorry, level đang không trong khoảng từ 1-200.
+			{{ end }}
+		{{ else }}
+			Sorry, role hoặc cấp đang không hợp lệ.
+		{{ end }}
+ 
+	{{ else if and (eq $cmd "set-type") (ge (len .CmdArgs) 2) }}
+		{{ $type := index .CmdArgs 1 }}
+		{{ if not (in (cslice "stack" "highest") $type) }}
+			Sorry tớ chỉ có 2 loại là "stack" or "highest".
+		{{ else }}
+			{{ $roleRewards.Set "type" $type }}
+			{{ $s := dbSet 0 "roleRewards" $roleRewards }}
+			Đã set loại role-giving của server sang `{{ $type }}`.
+		{{ end }}
+ 
+	{{ else if eq $cmd "reset" }}
+		{{ $s := dbSet 0 "roleRewards" (sdict "type" "stack") }} 
+		Tớ đã clear the role rewards của server!
+ 
+	{{ else if and (eq $cmd "remove") (ge (len .CmdArgs) 2) }}
+		{{ with (reFind `\d+` (index .CmdArgs 1)) }} 
+			{{ if $roleRewards.Get . }}
+				{{ $roleRewards.Del . }}
+				{{ $s := dbSet 0 "roleRewards" $roleRewards }}
+				Đã remove role reward của level `{{ . }}`.
+			{{ else }}
+				Sorry, not a role reward set for that level!
+			{{ end }}
+		{{ else }}
+			Vui lòng cung cấp level hợp lệ để remove role reward.
+		{{ end }}
+ 
+	{{ else if eq $cmd "view" }}
+		{{ if eq (len $roleRewards) 1 }}
+			{{ sendMessage nil (cembed "title" "Role Rewards" "thumbnail" (sdict "url" "https://static.wikia.nocookie.net/leagueoflegends/images/4/48/Summonerscup.jpg/revision/latest?cb=20150918135411") "description" (joinStr "" "**❯ Role Rewards:** n/a\n**❯ Type:** " $roleRewards.type)) }}
+		{{ else }}
+			{{ $out := "" }} 
+			{{- range $level := seq 1 201 -}} 
+				{{ with ($roleRewards.Get (str $level)) }}
+					{{ $out = printf "%s\n❯ **Level %d:** <@&%d>" $out $level . }}
+				{{ end }}
+			{{- end -}}
+			{{ sendMessage nil (cembed "title" "Role Rewards" "thumbnail" (sdict "url" "https://static.wikia.nocookie.net/leagueoflegends/images/4/48/Summonerscup.jpg/revision/latest?cb=20150918135411") "description" (joinStr "" $out "\n\n" "**❯ Type:** " $roleRewards.type)) }}
+		{{ end }}
+ 
+	{{ else }}
+		{{ sendMessage nil $helpMessage }}
+	{{ end }}
+{{ else }}
+	{{ sendMessage nil $helpMessage }}
+{{ end }}

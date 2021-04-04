@@ -1,0 +1,49 @@
+{{/*
+
+	This command manages messages - setting cooldowns, giving role rewards when users level up, and giving XP.
+	
+	Recommended trigger: Regex trigger with trigger `.*`.
+*/}}
+{{ $settings := 0 }} 
+{{ $roleRewards := sdict "type" "stack" }}
+{{ with (dbGet 0 "xpSettings") }} {{ $settings = sdict .Value }} {{ end }} 
+{{ with (dbGet 0 "roleRewards") }} {{ $roleRewards = sdict .Value }} {{ end }} 
+ 
+{{ $cool := false }} 
+{{ if (dbGet .User.ID "xpCooldown") }} {{ $cool = true }} {{ end }} 
+ 
+{{ if and (not $cool) $settings }} 
+	{{ $amtToGive := randInt $settings.min $settings.max }} 
+	{{ $currentXp := 0 }} 
+	{{ with (dbGet .User.ID "xp") }}
+		{{ $currentXp = .Value }}
+	{{ end }} 
+ 
+	{{ $currentLvl := roundFloor (mult 0.1 (sqrt $currentXp)) }} 
+	{{ $newXP := dbIncr .User.ID "xp" $amtToGive }}
+	{{ $newLvl := roundFloor (mult 0.1 (sqrt $newXP)) }} 
+	{{ $channel := or $settings.channel .Channel.ID }}
+	{{ if not (getChannel $channel) }} {{ $channel = .Channel.ID }} {{ end }}
+ 
+	{{ if ne $newLvl $currentLvl }} 
+		{{ $type := $roleRewards.type }} 
+		{{ $add := or ($roleRewards.Get (json $newLvl)) 0 }}
+		{{- range $level, $reward := $roleRewards -}} 
+			{{ if and (ge (toInt $newLvl) (toInt $level)) (not (hasRoleID $reward)) (eq $type "stack") (ne $level "type") }} {{ addRoleID $reward }}
+			{{ else if and (hasRoleID $reward) (eq $type "highest") $add }} {{ removeRoleID $reward }} {{ end }}
+		{{- end -}}
+		{{ if $add }} {{ addRoleID $add }} {{ end }}
+			**Mới lên cấp {{(toInt $newLvl)}} à, ngon thì lên cấp nữa xem nào ?? {{.User.Mention}} **
+		{{/*
+			{{ $embed := cembed 
+			"title" "❯ Level up!"
+			"description" (printf "Sức mạnh của hiệp sĩ **%s** đã lên level %d! Cùng nhau diệt quái vật tại Saga Land nào!" .User.Mention (toInt $newLvl))
+			"color" 14232643
+			}}
+		{{ sendMessage $channel (complexMessage "embed" $embed) }} 
+		*/}}
+		
+	{{ end }}
+	{{ $coolSecond := div $settings.cooldown 1000000000 }} 
+	{{ dbSetExpire .User.ID "xpCooldown" true $coolSecond }} 
+{{ end }}

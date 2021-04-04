@@ -1,0 +1,28 @@
+{{/*
+	sử dụng -lb [page] để xem
+	Regex trigger `^-(leaderboard|lb|top)`.
+*/}}
+{{ $page := 1 }} 
+{{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }}
+{{ $nextTo := mult (sub $page 1) 10 }} 
+{{ $users := dbTopEntries "xp" 10 $nextTo }} 
+{{ if not (len $users) }}
+	No users on this page :(
+{{ else }}
+	{{ $rank := $nextTo }} 
+	{{ $display := "" }} 
+	{{- range $users -}}
+		{{ $xp := toInt .Value }}
+		{{ $rank = add $rank 1 }} 
+		{{ $display = printf "%s\n• **%d.** [%s](https://www.youtube.com/watch?v=9kaCAbIXuyg) :: Level %d (%d XP)"
+			$display $rank .User.String (toInt (roundFloor (mult 0.1 (sqrt $xp)))) $xp
+		}} 
+	{{- end -}}
+	{{ $id := sendMessageRetID nil (cembed
+		"title" "❯ Leaderboard"
+		"thumbnail" (sdict "url" "https://image.flaticon.com/icons/png/512/3150/3150116.png")
+		"color" 14232643
+		"description" $display
+		"footer" (sdict "text" (joinStr "" "Page " $page))) 
+	}} 
+{{end}}
