@@ -1,0 +1,27 @@
+{{/*Code by TrickStar
+Trigger type : Command. Example: gif
+ex: <prefix>gif
+*/}}
+{{/* 
+https://www.google.com/search?q=%s&tbm=isch&tbs=itp%3Aanimated
+*/}}
+{{$base_url := "https://www.google.com/search?q= &tbm=isch&tbs=itp%3Aanimated"}}
+{{$query := urlescape .StrippedMsg}}
+{{$id := sendMessageRetID nil (print $base_url $query)}}
+{{sleep 3}}
+{{$Message := getMessage nil $id}}{{$del := false}}
+{{with $Message.Embeds}}
+	{{with (index . 0).Thumbnail}}
+		{{if .Width}}{{editMessage nil  $id (complexMessageEdit "content" "" "embed" (sdict "description" "**Result**" "image" (sdict "url" .ProxyURL)))}}
+		{{else}}
+			{{$del := true}}
+		{{end}}
+	{{else}}
+		{{$del := true}}
+	{{end}}
+{{else}}
+	{{$del := true}}
+{{end}}
+{{if $del}}
+	{{deleteMessage nil $id}}
+{{end}}
