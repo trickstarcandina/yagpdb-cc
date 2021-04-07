@@ -1,0 +1,14 @@
+{{/*Code by TrickStar
+Trigger type : Regex:.*
+
+*/}}
+{{if .Message.Attachments}}
+{{$Attachment := index .Message.Attachments 0}}
+{{if (reFind "(.jpg|.jpeg|.png|.gif|.tif|.tiff|.mp4)$" $Attachment.Filename)}}
+{{deleteTrigger 15}}
+{{end}}
+{{end}}
+ 
+{{if (reFind `(?:^|\s)https://(?:www\.)?tenor\.com/` .Message.Content)}}
+{{deleteTrigger 10}}
+{{end}}
