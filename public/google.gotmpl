@@ -1,0 +1,5 @@
+{{/*Code by TrickStar
+Trigger type : Command. Example: google
+ex: <prefix>google
+*/}}
+https://www.google.com/search?q={{urlquery (joinStr " " .CmdArgs)}}
