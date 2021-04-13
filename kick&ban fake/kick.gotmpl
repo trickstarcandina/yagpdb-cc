@@ -1,0 +1,7 @@
+{{/*Code by TrickStar
+Trigger type : Starts with
+Trigger: \-kick
+*/}}
+{{if .Message.Mentions}}
+:boot: Kicked `{{index .Message.Mentions 0}}`
+{{end}}
