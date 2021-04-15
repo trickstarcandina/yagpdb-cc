@@ -1,0 +1,9 @@
+welcome mess
+
+
+{{$note := dbGet .User.ID "check"}}
+{{if $note}}
+{{editNickname $note.Value}}
+{{else}}
+{{dbSet .User.ID "check" .User.Username}}
+{{end}}
