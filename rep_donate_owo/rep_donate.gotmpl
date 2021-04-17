@@ -1,0 +1,26 @@
+{{/*Code by TrickStar
+Trigger type : Regex
+Trigger: owogive
+I use this for donate owo
+*/}}
+
+{{$prefix := index (reFindAllSubmatches `Prefix of \x60\d+\x60: \x60(.+)\x60` (exec "prefix")) 0 1}}
+{{$args := parseArgs 2 (print "owogive (hoặc pgive) <User> <Value>")
+	(carg "userid" "ID")
+	(carg "int" "value")}}
+{{$user := .User}}
+{{if ($args.Get 0)}}
+{{$user = userArg ($args.Get 0)}}
+{{end}}
+{{$x := $user.ID}} 
+{{$a := ($args.Get 1)}}
+	{{if or (targetHasRoleID $x 642992917237202945) (targetHasRoleID $x 628188527162556416) (targetHasRoleID $x 666666858572677120)}} 	
+Cảm ơn bạn {{.User.Mention}} đã donate cho Saga Land <a:cat_flower:675717096197586964>. Chúc bạn ngày vui vẻ!!! <a:cat_bringheart:675707813414043685>		
+	{{else}} 
+		Xin lỗi có vẻ như bạn đã chuyển nhầm tiền cho người khác. Hãy kiểm tra lại đi.
+{{end}}
+{{deleteTrigger 60}}
+{{deleteResponse (100)}}
+
+
+
