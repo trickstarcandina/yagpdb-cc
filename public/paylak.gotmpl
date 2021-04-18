@@ -1,0 +1,11 @@
+{{/*Code by TrickStar
+Trigger type : Command
+*/}}
+{{ $args := parseArgs 0 "" 
+(carg "string" "message") }}
+{{ if $args.IsSet 0 }}
+    <a:capoo_paylak:740482796820103168> Dẫy lên {{$args.Get 0}} ưi <a:len:746626338856894555> 
+{{ else }}
+    <a:capoo_paylak:740482796820103168> Dẫy lên các bạn ưi <a:len:746626338856894555>
+{{ end }}
+{{ deleteTrigger 0 }}
