@@ -1,0 +1,22 @@
+{{/*Code by TrickStar
+Trigger type : Command. Example: random
+ex: <prefix>random
+*/}}
+{{$a := toInt64 (index .Args 1)}}
+{{$b := toInt64 (index .Args 2)}}
+{{$c := 0}}
+{{if eq $a $b}}
+Các giá trị không hợp lệ!
+{{else}}
+{{if or (gt $a 10000000000) (gt $b 10000000000) }}
+Số nhập vào **Không được lớn hơn 10000000000**!
+{{else}}
+{{if gt ($b) ($a)}}
+{{$c = randInt $a $b}}
+{{end}}
+{{if gt ($a) ($b)}}
+{{$c = randInt $b $a}}
+{{end}}
+{{end}}
+{{end}}
+**{{.User.Username}}**, con số may mắn của bạn là {{$c}}
