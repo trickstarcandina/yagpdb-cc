@@ -1,3 +1,7 @@
+  
+{{/*Code by TrickStar
+Added reactions only
+*/}}
 {{$upvote :="👍"}}
 {{$uVote := 0}}
  
@@ -7,6 +11,6 @@
     {{end}}
 {{end}}
 {{if ge $uVote 1}}
-{{sendMessage 835805521953030194 (index (getMessage nil .Message.ID).Embeds 0)}}
-{{deleteAllMessageReactions 835795727421931530 .Message.ID}}
+{{sendMessage 835805521953030194 (index (getMessage nil .Message.ID).Embeds 0)}} {{/* Edit this. This is channel cfs */}}
+{{deleteAllMessageReactions 835795727421931530 .Message.ID}} {{/* Edit this. This is nil cfs */}}
 {{end}}
