@@ -1,0 +1,16 @@
+{{/*Code by TrickStar
+Trigger type : Command
+*/}}
+Type 1:
+{{ $args := parseArgs 0 "" 
+(carg "string" "message") }}
+<content> {{$args.Get 0}}
+Type 2:
+<content> `{{index .Message.Mentions 0}}`
+Type 3:
+{{ $allArgs := .CmdArgs }}
+<content> {{ joinStr " "  $allArgs}}
+{{ deleteTrigger 0 }}
+Type 4:
+{{index .CmdArgs 0}} <content>
+
