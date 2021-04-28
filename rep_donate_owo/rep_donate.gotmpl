@@ -14,12 +14,12 @@ I use this for donate owo
 {{end}}
 {{$x := $user.ID}} 
 {{$a := ($args.Get 1)}}
-	{{if or (targetHasRoleID $x 642992917237202945) (targetHasRoleID $x 628188527162556416) (targetHasRoleID $x 666666858572677120)}} 	
-Cảm ơn bạn {{.User.Mention}} đã donate cho Saga Land <a:cat_flower:675717096197586964>. Chúc bạn ngày vui vẻ!!! <a:cat_bringheart:675707813414043685>		
+	{{if or (targetHasRoleID $x 642992917237202945) (targetHasRoleID $x 628188527162556416) (targetHasRoleID $x 666666858572677120)}}  		{{/* Format this */}}	
+Cảm ơn bạn {{.User.Mention}} đã donate cho Saga Land <a:cat_flower:675717096197586964>. Chúc bạn ngày vui vẻ!!! <a:cat_bringheart:675707813414043685>	{{/* Format this */}}	
 	{{else}} 
-		Xin lỗi có vẻ như bạn đã chuyển nhầm tiền cho người khác. Hãy kiểm tra lại đi.
+		Xin lỗi có vẻ như bạn đã chuyển nhầm tiền cho người khác. Hãy kiểm tra lại đi.								{{/* Format this */}}
 {{end}}
-{{deleteTrigger 60}}
+{{deleteTrigger 60}}	
 {{deleteResponse (100)}}
 
 
