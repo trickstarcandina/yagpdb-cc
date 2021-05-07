@@ -1,5 +1,9 @@
-welcome mess
-
+{{/*
+This command is used to reassign someone's alias on the server when they return to the server
+1. Select https://yagpdb.xyz/manage/598787196421668894/notifications/general
+2. Join message in server channel
+3. Message
+*/}}
 
 {{$note := dbGet .User.ID "check"}}
 {{if $note}}
