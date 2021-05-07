@@ -1,0 +1,46 @@
+{{/*Code by TrickStar
+Trigger type : Command. Example: time
+ex: <prefix>time
+*/}}
+{{ $assets := sdict
+	"morning" (sdict
+		"image" "https://cdn.iconscout.com/icon/free/png-512/sunrise-over-mountains-morning-sun-mountain-greenery-emoj-symbol-30770.png"
+		"color" 9498256)
+	"afternoon" (sdict
+		"image" "https://cdn0.iconfinder.com/data/icons/solar-panel-energy-1/64/08_Sun_cloud_energy_weather_afternoon-512.png"
+		"color" 16747520)
+	"evening" (sdict
+		"image" "https://cdn.iconscout.com/icon/premium/png-256-thumb/evening-1762016-1500990.png"
+		"color" 8087790)
+	"night" (sdict
+		"image" "https://cdn3.vectorstock.com/i/1000x1000/76/02/night-icon-vector-24247602.jpg"
+		"color" 1062054)
+}}
+{{ $timezone := "Asia/Ho_Chi_Minh" }} 
+{{ $location := "Ho_Chi_Minh" }} 
+{{ $marker := "night" }}
+{{ $output := exec "weather" $location }}
+{{ $output = reReplace `\x60+` $output "" }}
+{{ $res := split $output "\n" }}
+{{ $weather := slice (index $res 3) 15 }}
+{{ $temp := reReplace `\.\.` (reReplace ` \(.+$` (slice (index $res 4) 15) "") " - " }}
+ 
+{{ $now := currentTime.In (newDate 0 0 0 0 0 0 $timezone).Location }}
+{{ $hr := $now.Hour }}
+{{ if and (ge $hr 5) (lt $hr 12) }} {{ $marker = "morning" }}
+{{ else if and (ge $hr 12) (lt $hr 17) }} {{ $marker = "afternoon" }}
+{{ else if and (ge $hr 17) (lt $hr 21) }} {{ $marker = "evening" }}
+{{ end }}
+ 
+{{ $asset := $assets.Get $marker }}
+{{ $time := $now.Format "3:04:05 PM" }}
+{{ $date := $now.Format "Monday, January 2, 2006" }}
+{{ $embed := cembed
+	"title" (printf "Good %s, %s" $marker .User.Username)
+	"color" $asset.color
+	"thumbnail" (sdict "url" $asset.image)
+	"description" (printf "❯ **Time:** %s\n❯ **Date:** %s\n❯ **Weather:** %s (%s)" $time $date $weather $temp)
+	"footer" (sdict "text" "FromSaga☆withLove" "icon_url" "https://cdn.discordapp.com/emojis/669378067877199887.png?v=1")
+}}
+{{ sendMessage nil $embed }}
+ 
