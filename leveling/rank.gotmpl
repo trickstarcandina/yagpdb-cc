@@ -40,7 +40,7 @@
 			"❯ **%d / %d** XP\n❯ **Total:** %d\n❯ **Level:** %d\n❯ **Progress:**\n[**%s**](https://www.youtube.com/watch?v=9kaCAbIXuyg)"
 			(toInt $current) (toInt $total) (toInt $xp) (toInt $level) $bar)
 		"thumbnail" (sdict "url" ($user.AvatarURL "4096")) 
-	}}
+}}
 
 {{ $rank := 0 }} 
 {{- range $index, $entry := dbTopEntries "xp" 100 0 -}} 
