@@ -1,0 +1,27 @@
+{{/*Code by TrickStar
+This code is repeat you messeage
+Trigger type : Command. Example: repeat 
+ex: <prefix>repeat 
+*/}}
+{{ $msg := "" }}
+{{ if eq (len .CmdArgs) 1 }}
+	{{ $phrase := index .CmdArgs 0 }}
+	{{- range seq 0 5 -}}
+		{{ $msg = joinStr "\n" $msg $phrase }}
+	{{- end -}}
+	{{ sendMessage nil $msg }}
+{{ else if .CmdArgs }}
+	{{ $count := index .CmdArgs 0 | toInt }}
+	{{ $phrase := slice .CmdArgs 1 | joinStr " " }}
+	{{ if and $count (le $count 2000) }}
+		{{- range seq 0 $count -}}
+			{{ $msg = joinStr "\n" $msg $phrase }}
+		{{- end -}}
+		{{ if le (len $msg) 2000 }} {{ sendMessage nil $msg }}
+		{{ else }} Tin nhắn này dài quá ko lặp nhé (～￣▽￣)～ {{ end }}
+	{{ else }}
+		**Lỗi rùi dùng theo cú pháp nèee:** `-repeat <số lần> <từ cần lặp>`
+	{{ end }}
+{{ else }}
+	**Lỗi rùi dùng theo cú pháp nèee:** `-repeat <số lần> <từ cần lặp>`
+{{ end }}
