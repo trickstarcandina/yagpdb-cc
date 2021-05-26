@@ -16,24 +16,38 @@ I upload a message through a channel and then the right holders will moderate an
     (carg "string" "nội dung")}}
 {{if .Message.Attachments}}
     {{range .Message.Attachments}}
-    	{{$msgEmbed := cembed
-		"title" (joinStr "" "🦅 🦅 🦅      ꧁༺ Peculiar Academy Confession #" (toString (toInt $no)) " ༻ ꧂      🦅 🦅 🦅" ) {{/* Edit this */}}
-		"description" (printf "-------------------------------------------------------\n*%s*" ($args.Get 0))
-        	"image" (sdict "url" .ProxyURL)  
-        	"color" 16763904
-		"footer" (sdict "text" (joinStr " " "Confession at" $time $date) "icon_url" "https://cdn.discordapp.com/attachments/829733340155740182/835762811153940490/unknown.png") {{/* Edit this */}} 
+		{{ if $args.IsSet 0 }}		{{/* Check args */}}
+			{{$msgEmbed := cembed
+				"title" (joinStr "" "🦅 🦅 🦅      ꧁༺ Peculiar Academy Confession #" (toString (toInt $no)) " ༻ ꧂      🦅 🦅 🦅" )  
+				"description" (printf "-------------------------------------------------------\n*%s*" ($args.Get 0))
+        		"image" (sdict "url" .ProxyURL)  
+        		"color" 16763904
+				"footer" (sdict "text" (joinStr " " "Confession at" $time $date) "icon_url" "https://cdn.discordapp.com/attachments/829733340155740182/835762811153940490/unknown.png") 
     		}}
-    	{{$x := sendMessageRetID 835795727421931530 $msgEmbed}} {{/* Edit this. This is channel moderation */}}
-    	{{addMessageReactions 835795727421931530 $x "👍"}}
+    		{{$x := sendMessageRetID 835795727421931530 $msgEmbed}} {{/* Edit this. This is channel moderation */}}
+    		{{addMessageReactions 835795727421931530 $x "👍"}}
+		{{else}}
+			{{$msgEmbed := cembed
+				"title" (joinStr "" "🦅 🦅 🦅      ꧁༺ Peculiar Academy Confession #" (toString (toInt $no)) " ༻ ꧂      🦅 🦅 🦅" ) 
+				"description" (printf "-------------------------------------------------------\n")
+        		"image" (sdict "url" .ProxyURL)  
+        		"color" 16763904
+				"footer" (sdict "text" (joinStr " " "Confession at" $time $date) "icon_url" "https://cdn.discordapp.com/attachments/829733340155740182/835762811153940490/unknown.png") 
+    		}}
+    		{{$x := sendMessageRetID 835795727421931530 $msgEmbed}} {{/* Edit this. This is channel moderation */}}
+    		{{addMessageReactions 835795727421931530 $x "👍"}}
+		{{end}}
     {{end}}
 {{else}}
-    {{$msgEmbed := cembed
-		"title"  (joinStr "" "🦅 🦅 🦅      ꧁༺ Peculiar Academy Confession #" (toString (toInt $no)) " ༻ ꧂      🦅 🦅 🦅" ) {{/* Edit this */}}
-		"description" (printf "-------------------------------------------------------\n*%s*\n-------------------------------------------------------\n" ($args.Get 0))
+	{{ if $args.IsSet 0 }}
+    	{{$msgEmbed := cembed
+			"title"  (joinStr "" "🦅 🦅 🦅      ꧁༺ Peculiar Academy Confession #" (toString (toInt $no)) " ༻ ꧂      🦅 🦅 🦅" ) 
+			"description" (printf "-------------------------------------------------------\n*%s*\n-------------------------------------------------------\n" ($args.Get 0))
         	"color" 16763904
-		"footer" (sdict "text" (joinStr " " "Confession at" $time $date) "icon_url" "https://cdn.discordapp.com/attachments/829733340155740182/835762811153940490/unknown.png") {{/* Edit this */}}
-    		}}
+			"footer" (sdict "text" (joinStr " " "Confession at" $time $date) "icon_url" "https://cdn.discordapp.com/attachments/829733340155740182/835762811153940490/unknown.png") 
+    	}}
     	{{$x := sendMessageRetID 835795727421931530 $msgEmbed}} {{/* Edit this. This is channel moderation */}}
     	{{addMessageReactions 835795727421931530 $x "👍"}}
+	{{end}}
 {{end}}
-{{deleteTrigger 1}}
+{{deleteTrigger 0}}

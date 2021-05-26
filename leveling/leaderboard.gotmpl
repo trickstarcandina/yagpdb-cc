@@ -1,6 +1,7 @@
 {{/*
 	sử dụng -lb [page] để xem
-	Regex trigger `^-(leaderboard|lb|top)$`.
+	Regex trigger `^-(leaderboard|lb|top)`.
+	next page : -lb 2 , -lb 3 
 */}}
 {{ $page := 1 }} 
 {{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }}
