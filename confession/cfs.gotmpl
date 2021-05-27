@@ -26,6 +26,7 @@ I upload a message through a channel and then the right holders will moderate an
     		}}
     		{{$x := sendMessageRetID 835795727421931530 $msgEmbed}} {{/* Edit this. This is channel moderation */}}
     		{{addMessageReactions 835795727421931530 $x "👍"}}
+			{{addMessageReactions 835795727421931530 $x "❌"}}
 		{{else}}
 			{{$msgEmbed := cembed
 				"title" (joinStr "" "🦅 🦅 🦅      ꧁༺ Peculiar Academy Confession #" (toString (toInt $no)) " ༻ ꧂      🦅 🦅 🦅" ) 
@@ -36,6 +37,7 @@ I upload a message through a channel and then the right holders will moderate an
     		}}
     		{{$x := sendMessageRetID 835795727421931530 $msgEmbed}} {{/* Edit this. This is channel moderation */}}
     		{{addMessageReactions 835795727421931530 $x "👍"}}
+			{{addMessageReactions 835795727421931530 $x "❌"}}
 		{{end}}
     {{end}}
 {{else}}
@@ -48,6 +50,7 @@ I upload a message through a channel and then the right holders will moderate an
     	}}
     	{{$x := sendMessageRetID 835795727421931530 $msgEmbed}} {{/* Edit this. This is channel moderation */}}
     	{{addMessageReactions 835795727421931530 $x "👍"}}
+		{{addMessageReactions 835795727421931530 $x "❌"}}
 	{{end}}
 {{end}}
 {{deleteTrigger 0}}
