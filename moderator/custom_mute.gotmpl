@@ -1,0 +1,8 @@
+{{/*Code by TrickStar
+Trigger type : Command
+*/}}
+{{$target := (userArg (index .CmdArgs 0))}}
+{{giveRoleID $target 625252467457916928}}
+{{if .Message.Mentions}}
+`{{index .Message.Mentions 0}}` đã bị tống vào ngục
+{{end}}
