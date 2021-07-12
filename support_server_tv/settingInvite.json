@@ -1,0 +1,27 @@
+.config welcomeembed {
+    "embed": {
+        "description": "Cảm ơn {inviter} đã mời {member} vào Học viện bí ẩn Peculiar Academy nhaaaaa :star2:",
+        "color": 4321431,
+        "fields": [
+            {
+                "name": "Invites",
+                "value": "Regular : {inviter.regular}    |    Invites : {inviter.invites}    |    Bonus : {inviter.bonus}    |    Fake : {inviter.fake}    |    Leave : {inviter.leave}",
+                "inline": false
+            }
+        ]
+    }
+}
+
+.config leaveembed {
+    "embed": {
+        "description": "Tạm biệt {member}, được mời bởi {inviter}",
+        "color": 4321431,
+        "fields": [
+            {
+                "name": "Invites",
+                "value": "Regular : {inviter.regular}    |    Invites : {inviter.invites}    |    Bonus : {inviter.bonus}    |    Fake : {inviter.fake}    |    Leave : {inviter.leave}",
+                "inline": false
+            }
+        ]
+    }
+}
