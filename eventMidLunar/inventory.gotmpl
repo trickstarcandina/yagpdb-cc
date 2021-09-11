@@ -1,0 +1,57 @@
+{{ $min := 0 }}
+
+{{ $wordm := 0 }} 
+{{ with dbGet .User.ID "wordm" }}
+	{{ $wordm = .Value }}
+{{ end }}
+{{$min = (toInt $wordm)}}
+
+{{ $wordo := 0 }} 
+{{ with dbGet .User.ID "wordo" }}
+	{{ $wordo = .Value }}
+{{ end }}
+{{if lt (fdiv $wordo 2) (toFloat $min)}}
+    {{$min = (toInt $wordo)}}
+{{end}}
+
+{{ $wordn := 0 }} 
+{{ with dbGet .User.ID "wordn" }}
+	{{ $wordn = .Value }}
+{{ end }}
+{{if lt (toInt $wordn) $min}}
+    {{$min = (toInt $wordn)}}
+{{end}}
+
+{{ $wordc := 0 }} 
+{{ with dbGet .User.ID "wordc" }}
+	{{ $wordc = .Value }}
+{{ end }}
+{{if lt (toInt $wordc) $min}}
+    {{$min = (toInt $wordc)}}
+{{end}}
+
+{{ $worda := 0 }} 
+{{ with dbGet .User.ID "worda" }}
+	{{ $worda = .Value }}
+{{ end }}
+{{if lt (toInt $worda) $min}}
+    {{$min = (toInt $worda)}}
+{{end}}
+
+{{ $wordk := 0 }} 
+{{ with dbGet .User.ID "wordk" }}
+	{{ $wordk = .Value }}
+{{ end }}
+{{if lt (toInt $wordk) $min}}
+    {{$min = (toInt $wordk)}}
+{{end}}
+
+{{ $worde := 0 }} 
+{{ with dbGet .User.ID "worde" }}
+	{{ $worde = .Value }}
+{{ end }}
+{{if lt (toInt $worde) $min}}
+    {{$min = (toInt $worde)}}
+{{end}}
+
+Bạn đang có {{$wordm}} <a:cat_M:819202996747108352> {{$wordo}} <a:cat_O:819203089349345350> {{$wordn}} <a:cat_N:819203075977904188> {{$wordc}} <a:cat_C:819201905741529098> {{$worda}} <a:cat_A:819201634395488288> {{$wordk}} <a:cat_K:819202981416927304>  {{$worde}} <a:cat_E:819202860670648340> . Bạn đang có {{$min}} bánh trung thu.

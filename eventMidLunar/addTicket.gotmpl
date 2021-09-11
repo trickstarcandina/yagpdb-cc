@@ -1,0 +1,4 @@
+{{ $user := 0 }} 
+{{ with .CmdArgs }} {{ $user = index . 0 | userArg }} {{ end }} 
+{{ $s := dbIncr $user.ID "countticket" 1 }} 
+Chúc mừng {{$user.Mention}} đã nhận được 1 hộp bánh, bạn đang có {{$s}} hộp, mở hộp bằng lệnh -open
