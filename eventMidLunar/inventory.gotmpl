@@ -11,7 +11,7 @@
 	{{ $wordo = .Value }}
 {{ end }}
 {{if lt (fdiv $wordo 2) (toFloat $min)}}
-    {{$min = (toInt $wordo)}}
+    {{$min = (toInt (div $wordo 2))}}
 {{end}}
 
 {{ $wordn := 0 }} 
@@ -54,4 +54,4 @@
     {{$min = (toInt $worde)}}
 {{end}}
 
-Bạn đang có {{$wordm}} <a:cat_M:819202996747108352> {{$wordo}} <a:cat_O:819203089349345350> {{$wordn}} <a:cat_N:819203075977904188> {{$wordc}} <a:cat_C:819201905741529098> {{$worda}} <a:cat_A:819201634395488288> {{$wordk}} <a:cat_K:819202981416927304>  {{$worde}} <a:cat_E:819202860670648340> . Bạn đang có {{$min}} bánh trung thu.
+{{.User.Mention}} đang có {{$wordm}} <a:cat_M:819202996747108352> {{$wordo}} <a:cat_O:819203089349345350> {{$wordn}} <a:cat_N:819203075977904188> {{$wordc}} <a:cat_C:819201905741529098> {{$worda}} <a:cat_A:819201634395488288> {{$wordk}} <a:cat_K:819202981416927304>  {{$worde}} <a:cat_E:819202860670648340> . Ghép được {{$min}} bánh trung thu. Làm nhiệm vụ để kiếm thêm nhé ! 

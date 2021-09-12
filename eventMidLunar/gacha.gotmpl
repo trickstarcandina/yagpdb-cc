@@ -14,34 +14,32 @@
 {{ end }}
 
 {{if gt (toInt $totalticket) 0}}
-{{$x := sendMessageRetID nil (printf "<a:chamhoigif:749921509639716874>" )}} 
-{{sleep 3}} 
 
 {{$d := randInt 8}}
 
 {{if eq $d 1}}
-{{editMessage nil $x (printf "<a:cat_M:819202996747108352>")}} 
+{{sendMessage nil (printf "<a:cat_M:819202996747108352>")}} 
 {{$a := dbIncr .User.ID "wordm" 1}}
 {{else if eq $d 2}}
-{{editMessage nil $x (printf "<a:cat_O:819203089349345350>")}}
+{{sendMessage nil (printf "<a:cat_O:819203089349345350>")}}
 {{$a := dbIncr .User.ID "wordo" 1}} 
 {{else if eq $d 3}}
-{{editMessage nil $x (printf "<a:cat_N:819203075977904188>")}} 
+{{sendMessage nil (printf "<a:cat_N:819203075977904188>")}} 
 {{$a := dbIncr .User.ID "wordn" 1}}
 {{else if eq $d 4}}
-{{editMessage nil $x (printf "<a:cat_C:819201905741529098>")}} 
+{{sendMessage nil (printf "<a:cat_C:819201905741529098>")}} 
 {{$a := dbIncr .User.ID "wordc" 1}}
 {{else if eq $d 5}}
-{{editMessage nil $x (printf "<a:cat_A:819201634395488288>")}} 
+{{sendMessage nil (printf "<a:cat_A:819201634395488288>")}} 
 {{$a := dbIncr .User.ID "worda" 1}}
 {{else if eq $d 6}}
-{{editMessage nil $x (printf "<a:cat_K:819202981416927304>")}} 
+{{sendMessage nil (printf "<a:cat_K:819202981416927304>")}} 
 {{$a := dbIncr .User.ID "wordk" 1}}
 {{else if eq $d 0}}
-{{editMessage nil $x (printf "<a:cat_E:819202860670648340>")}} 
+{{sendMessage nil (printf "<a:cat_E:819202860670648340>")}} 
 {{$a := dbIncr .User.ID "worde" 1}}
 {{else if eq $d 7}}
-{{editMessage nil $x (printf "<a:cat_O:819203089349345350>")}}
+{{sendMessage nil (printf "<a:cat_O:819203089349345350>")}}
 {{$a := dbIncr .User.ID "wordo" 1}} 
 {{end}}
 là chữ {{.User.Mention}} nhận được. Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt quay.

@@ -2,7 +2,6 @@
 {{ with dbGet .User.ID "countmoon" }}
 	{{ $msg = .Value }}
 {{ end }} 
-{{/* {{sendMessage nil (print .User.Mention " bạn đã chat" $a)}} */}}
 
 {{ $totalticket := 0 }} 
 {{ with dbGet .User.ID "countticket" }}
@@ -36,7 +35,7 @@
 {{$a := dbIncr .User.ID "checkfull" (sub 4 $check)}}
 {{$b := dbIncr .User.ID "countticket" (sub 4 $check)}}
 
-{{else if and (gt (toInt $msg) 40) (lt (toInt $check) 5)}}
+{{else if and (gt (toInt $msg) 200) (lt (toInt $check) 5)}}
 {{ $totalticket = add $totalticket (sub 5 $check)}}
 {{$a := dbIncr .User.ID "checkfull" (sub 5 $check)}}
 {{$b := dbIncr .User.ID "countticket" (sub 5 $check)}}

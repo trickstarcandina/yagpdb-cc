@@ -6,19 +6,20 @@
 		{{if not $db}}{{$db = cslice "dbnil"}}{{else}}{{$db = cslice.AppendSlice $db.Value}}{{end}}
 		{{if eq (str ($args.Get 0)) (index $db 0)}}
 			{{if eq (str ($args.Get 0)) (index $db 0)}}
-				{{$x := sendMessageRetID nil (cembed "author" (sdict "icon_url" "https://cdn.discordapp.com/emojis/714051544265392229.gif" "name" "This will take a while...") "description" "Please wait untill the command is done running.\n**Do not run this command multiple times at the same time**\nYou will be pinged if the reset is done :)" "color" 0xFAA61A)}}
+				{{$x := sendMessageRetID nil (cembed "author" (sdict "icon_url" "https://cdn.discordapp.com/emojis/714051544265392229.gif" "name" "Sẽ mất thời gian 1 chút...") "description" "Vui lòng đợi khi lệnh này đang chạy\n**Không chạy lại lệnh này cùng lúc lệnh đang xử lý**\nTôi sẽ ping bạn lúc lệnh này chạy xong ＞﹏＜" "color" 0xFAA61A)}}
 				{{execCC .CCID nil 5 (sdict "key" (index $db 1) "id" $x)}}
 				{{dbDel .User.ID "dbresetkey"}}
 			{{else}}
-				{{sendMessage nil (print "Wrong code provided. Use `" $prefix "dbresetkey <Key/Code>` to get a new code")}}
+				{{sendMessage nil (print "Nhập sai code. Gõ `" $prefix "dbresetkey <Key>` để lấy code mới")}}
 			{{end}}
 		{{else if (str ($args.Get 0))}}
 			{{$cslice := shuffle (cslice "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z")}}
 			{{$random := ""}}{{range (seq 0 10)}}{{$r := index (shuffle (cslice 0 1)) 0}}{{if eq $r 1}}{{$random = print $random (upper (index $cslice .))}}{{else}}{{$random = print $random (index $cslice .)}}{{end}}{{end}}
 			{{dbSetExpire .User.ID "dbresetkey" (cslice $random ($args.Get 0)) 60}}
-			{{sendMessage nil (cembed "title" "Hold up!" "description" (print "**YOU ARE ABOUT TO DELETE ALL KEYS WITH THE NAME `" ($args.Get 0) "` ON THIS SERVER\n\nARE YOU SURE YOU WANT TO DO THIS?**\n**❗There is no going back if you reset it❗**\n\nIf you are 100% sure type `" $prefix "dbresetkey " $random "`") "footer" (sdict "text" "The code will expire in one minute") "color" 0xBE1931 "thumbnail" (sdict "url" "https://cdn.discordapp.com/emojis/565142262401728512.png"))}}
+			{{sendMessage nil (cembed "title" "Hold up!" "description" (print "**THAO TÁC NÀY SẼ RESET Key YAGPDB CỦA SERVER NÀY\n\nBẠN CÓ CHẮC CHẮN SẼ THỰC HIỆN NÓ ?**\n**❗Không có cách nào để trở lại nếu reset❗**\n\nNếu bạn chắc chắn 100% hãy gõ `" $prefix "dbresetkey " $random "`") 
+			"footer" (sdict "text" "Code này có thời hạn 1 phút") "color" 0xBE1931 "thumbnail" (sdict "url" "https://cdn.discordapp.com/emojis/703792397557039164.png?v=1"))}}
 		{{else}}
-			{{sendMessage nil (print "Wrong code provided. Use `" $prefix "dbresetkey <Key/Code>` to get a new code")}}
+			{{sendMessage nil (print "Nhập sai code. Gõ `" $prefix "dbresetkey <Key>` để lấy code mới")}}
 		{{end}}
 {{else}}
 	{{$c := 0}}
@@ -30,7 +31,7 @@
 	{{if ne $c 0}}
 		{{execCC .CCID nil 10 .ExecData}}
 	{{else}}
-		{{sendMessage nil (print .User.Mention " <:wolfyey:664130162023202816> I am done resetting the database!")}}
+		{{sendMessage nil (print .User.Mention "Tôi đã reset xong chúc bạn 1 ngày vui vẻ!")}}
 		{{deleteMessage nil .ExecData.id 0}}
 	{{end}}
 {{end}}
