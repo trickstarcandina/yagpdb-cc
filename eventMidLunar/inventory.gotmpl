@@ -54,4 +54,29 @@
     {{$min = (toInt $worde)}}
 {{end}}
 
-{{.User.Mention}} đang có {{$wordm}} <a:cat_M:819202996747108352> {{$wordo}} <a:cat_O:819203089349345350> {{$wordn}} <a:cat_N:819203075977904188> {{$wordc}} <a:cat_C:819201905741529098> {{$worda}} <a:cat_A:819201634395488288> {{$wordk}} <a:cat_K:819202981416927304>  {{$worde}} <a:cat_E:819202860670648340> . Ghép được {{$min}} bánh trung thu. Làm nhiệm vụ để kiếm thêm nhé ! 
+{{ $countcake := 0 }} 
+{{ with dbGet .User.ID "countcake" }}
+	{{ $countcake = .Value }}
+{{ end }}
+{{$a := dbIncr .User.ID "countcake" (sub $min (toInt $countcake))}}
+
+{{ $user := .User }} 
+{{ $color := 14232643 }} 
+{{ $avatar := (joinStr "" "https://cdn.discordapp.com/avatars/" (toString .User.ID) "/" .User.Avatar ".png") }}
+{{$embed := sdict
+	"title" (joinStr "" "❯ Kho đồ của "  .User.Username "!") 
+	"color" $color
+	"fields" (cslice 
+        (sdict "name" "<a:cat_M:819202996747108352>" "value" (toString (toInt $wordm)) "inline" true) 
+        (sdict "name" "<a:cat_O:819203089349345350>" "value" (toString (toInt $wordo)) "inline" true) 
+        (sdict "name" "<a:cat_N:819203075977904188>" "value" (toString (toInt $wordn)) "inline" true) 
+        (sdict "name" "<a:cat_C:819201905741529098>" "value" (toString (toInt $wordc)) "inline" true) 
+        (sdict "name" "<a:cat_A:819201634395488288>" "value" (toString (toInt $worda)) "inline" true) 
+        (sdict "name" "<a:cat_K:819202981416927304>" "value" (toString (toInt $wordk)) "inline" true)
+		(sdict "name" "<a:cat_E:819202860670648340>" "value" (toString (toInt $worde)) "inline" true)
+		(sdict "name" "🥮" "value" (toString $min) "inline" false) 
+    ) 
+	"thumbnail" (sdict "url" $avatar) 
+}}
+
+{{ sendMessage nil (cembed $embed) }}
