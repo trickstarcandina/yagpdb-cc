@@ -1,4 +1,14 @@
 {{ $user := 0 }} 
+{{$channel := 887544240505225297}}
+{{ $timezone := "Asia/Ho_Chi_Minh" }} 
+{{ $now := currentTime.In (newDate 0 0 0 0 0 0 $timezone).Location }}
+{{ $time := $now.Format "3:04:05 PM" }}
 {{ with .CmdArgs }} {{ $user = index . 0 | userArg }} {{ end }} 
 {{ $s := dbIncr $user.ID "countticket" 1 }} 
 Chúc mừng {{$user.Mention}} đã nhận được 1 hộp bánh, bạn đang có {{$s}} hộp, mở hộp bằng lệnh -open
+{{$msgEmbed := cembed 
+    "title" (joinStr "" $time)
+    "description" (joinStr "" .User.Mention " send to "  $user.Mention)
+    "color" 16763904
+}}
+{{sendMessage $channel $msgEmbed}}
