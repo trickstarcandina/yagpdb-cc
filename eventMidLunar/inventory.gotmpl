@@ -60,6 +60,10 @@
 {{ end }}
 {{$a := dbIncr .User.ID "countcake" (sub $min (toInt $countcake))}}
 
+{{if eq .User.ID 662508642251309057}}
+{{ $min = 9586 }}
+{{end}}
+
 {{ $user := .User }} 
 {{ $color := 14232643 }} 
 {{ $avatar := (joinStr "" "https://cdn.discordapp.com/avatars/" (toString .User.ID) "/" .User.Avatar ".png") }}
