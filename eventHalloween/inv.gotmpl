@@ -1,0 +1,90 @@
+
+{{ $manh1 := 0 }} 
+{{ with dbGet .User.ID "manh1" }}
+	{{ $manh1 = .Value }}
+{{ end }}
+
+{{ $manh2 := 0 }} 
+{{ with dbGet .User.ID "manh2" }}
+	{{ $manh2 = .Value }}
+{{ end }}
+
+{{ $manh3 := 0 }} 
+{{ with dbGet .User.ID "manh3" }}
+	{{ $manh3 = .Value }}
+{{ end }}
+
+{{ $manh4 := 0 }} 
+{{ with dbGet .User.ID "manh4" }}
+	{{ $manh4 = .Value }}
+{{ end }}
+
+{{ $manh5 := 0 }} 
+{{ with dbGet .User.ID "manh5" }}
+	{{ $manh5 = .Value }}
+{{ end }}
+
+{{ $manh6 := 0 }} 
+{{ with dbGet .User.ID "manh6" }}
+	{{ $manh6 = .Value }}
+{{ end }}
+
+{{ $manh7 := 0 }} 
+{{ with dbGet .User.ID "manh7" }}
+	{{ $manh7 = .Value }}
+{{ end }}
+
+{{ $manh8 := 0 }} 
+{{ with dbGet .User.ID "manh8" }}
+	{{ $manh8 = .Value }}
+{{ end }}
+
+{{ $manh9 := 0 }} 
+{{ with dbGet .User.ID "manh9" }}
+	{{ $manh9 = .Value }}
+{{ end }}
+
+{{ $manh10 := 0 }} 
+{{ with dbGet .User.ID "manh10" }}
+	{{ $manh10 = .Value }}
+{{ end }}
+
+{{ $manh10 := 0 }} 
+{{ with dbGet .User.ID "manh10" }}
+	{{ $manh10 = .Value }}
+{{ end }}
+
+{{ $manh11 := 0 }} 
+{{ with dbGet .User.ID "manh11" }}
+	{{ $manh11 = .Value }}
+{{ end }}
+
+{{ $manh12 := 0 }} 
+{{ with dbGet .User.ID "manh12" }}
+	{{ $manh12 = .Value }}
+{{ end }}
+
+{{ $user := .User }} 
+{{ $color := 14232643 }} 
+{{ $avatar := (joinStr "" "https://cdn.discordapp.com/avatars/" (toString .User.ID) "/" .User.Avatar ".png") }}
+{{$embed := sdict
+	"title" (joinStr "" "❯ Kho đồ của "  .User.Username "!") 
+	"color" $color
+	"fields" (cslice 
+        (sdict "name" "<:manh1:891678899405217793>" "value" (toString (toInt $manh1)) "inline" true) 
+        (sdict "name" "<:manh2:891678899262586942>" "value" (toString (toInt $manh2)) "inline" true) 
+        (sdict "name" "<:manh3:891678899304529951>" "value" (toString (toInt $manh3)) "inline" true) 
+        (sdict "name" "<:manh4:891678899413614633> " "value" (toString (toInt $manh4)) "inline" true) 
+        (sdict "name" "<:manh5:891678900038557717>" "value" (toString (toInt $manh5)) "inline" true) 
+        (sdict "name" "<:manh6:891678899388448838>" "value" (toString (toInt $manh6)) "inline" true)
+		(sdict "name" "<:manh7:891678899400998932>" "value" (toString (toInt $manh7)) "inline" true)
+		(sdict "name" "<:manh8:891678899472318514> " "value" (toString (toInt $manh8)) "inline" true)
+        (sdict "name" "<:manh9:891678899300352020>" "value" (toString (toInt $manh9)) "inline" true)
+        (sdict "name" "<:manh10:891678899371642931>" "value" (toString (toInt $manh10)) "inline" true)
+        (sdict "name" "<:manh11:891679629746798612>" "value" (toString (toInt $manh11)) "inline" true)
+        (sdict "name" "<:manh12:891678899120005190>" "value" (toString (toInt $manh12)) "inline" true)
+    ) 
+	"thumbnail" (sdict "url" $avatar) 
+}}
+
+{{ sendMessage nil (cembed $embed) }}
