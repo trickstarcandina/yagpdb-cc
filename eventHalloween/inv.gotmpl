@@ -1,89 +1,67 @@
-
-{{ $manh1 := 0 }} 
-{{ with dbGet .User.ID "manh1" }}
-	{{ $manh1 = .Value }}
+{{ $stringValue := 0 }} 
+{{ with dbGet .User.ID "stringValue" }}
+	{{ $stringValue = .Value }}
 {{ end }}
 
-{{ $manh2 := 0 }} 
-{{ with dbGet .User.ID "manh2" }}
-	{{ $manh2 = .Value }}
-{{ end }}
+{{if $stringValue}}
+{{else}}
+	{{dbSet .User.ID "stringValue" "F,F,F,F,F,F,F,F,F,F,F,F"}}
+    {{ $stringValue =  "F,F,F,F,F,F,F,F,F,F,F,F"}}
+{{end}}
 
-{{ $manh3 := 0 }} 
-{{ with dbGet .User.ID "manh3" }}
-	{{ $manh3 = .Value }}
-{{ end }}
+{{$res1 := ""}}
+{{$res2 := ""}}
+{{$res3 := ""}}
+{{range $k, $v := (split $stringValue ",")}} 
+    {{if eq (toInt $k) 0}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:manh1:891678899405217793>"}}
+		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
+	{{else if eq (toInt $k) 1}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:manh2:891678899262586942>"}} 
+		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
+	{{else if eq (toInt $k) 2}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:manh3:891678899304529951>"}}
+		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
+	{{else if eq (toInt $k) 3}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:manh4:891678899413614633>"}}
+		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
 
-{{ $manh4 := 0 }} 
-{{ with dbGet .User.ID "manh4" }}
-	{{ $manh4 = .Value }}
-{{ end }}
-
-{{ $manh5 := 0 }} 
-{{ with dbGet .User.ID "manh5" }}
-	{{ $manh5 = .Value }}
-{{ end }}
-
-{{ $manh6 := 0 }} 
-{{ with dbGet .User.ID "manh6" }}
-	{{ $manh6 = .Value }}
-{{ end }}
-
-{{ $manh7 := 0 }} 
-{{ with dbGet .User.ID "manh7" }}
-	{{ $manh7 = .Value }}
-{{ end }}
-
-{{ $manh8 := 0 }} 
-{{ with dbGet .User.ID "manh8" }}
-	{{ $manh8 = .Value }}
-{{ end }}
-
-{{ $manh9 := 0 }} 
-{{ with dbGet .User.ID "manh9" }}
-	{{ $manh9 = .Value }}
-{{ end }}
-
-{{ $manh10 := 0 }} 
-{{ with dbGet .User.ID "manh10" }}
-	{{ $manh10 = .Value }}
-{{ end }}
-
-{{ $manh10 := 0 }} 
-{{ with dbGet .User.ID "manh10" }}
-	{{ $manh10 = .Value }}
-{{ end }}
-
-{{ $manh11 := 0 }} 
-{{ with dbGet .User.ID "manh11" }}
-	{{ $manh11 = .Value }}
-{{ end }}
-
-{{ $manh12 := 0 }} 
-{{ with dbGet .User.ID "manh12" }}
-	{{ $manh12 = .Value }}
-{{ end }}
+	{{else if eq (toInt $k) 4}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:manh5:891678900038557717>"}}
+		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
+	{{else if eq (toInt $k) 5}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:manh6:891678899388448838>"}} 
+		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
+	{{else if eq (toInt $k) 6}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:manh7:891678899400998932>"}}
+		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
+	{{else if eq (toInt $k) 7}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:manh8:891678899472318514>"}}
+		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
+  
+	{{else if eq (toInt $k) 8}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:manh9:891678899300352020>"}}
+		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
+	{{else if eq (toInt $k) 9}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:manh10:891678899371642931>"}} 
+		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
+	{{else if eq (toInt $k) 10}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:manh11:891679629746798612>"}}
+		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
+	{{else if eq (toInt $k) 11}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:manh12:891678899120005190>"}}
+		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
+	
+    {{end}}
+{{end}}
 
 {{ $user := .User }} 
 {{ $color := 14232643 }} 
 {{ $avatar := (joinStr "" "https://cdn.discordapp.com/avatars/" (toString .User.ID) "/" .User.Avatar ".png") }}
 {{$embed := sdict
-	"title" (joinStr "" "❯ Kho đồ của "  .User.Username "!") 
+	"title" (joinStr "" "❯ Bức tranh của "  .User.Username) 
 	"color" $color
-	"fields" (cslice 
-        (sdict "name" "<:manh1:891678899405217793>" "value" (toString (toInt $manh1)) "inline" true) 
-        (sdict "name" "<:manh2:891678899262586942>" "value" (toString (toInt $manh2)) "inline" true) 
-        (sdict "name" "<:manh3:891678899304529951>" "value" (toString (toInt $manh3)) "inline" true) 
-        (sdict "name" "<:manh4:891678899413614633> " "value" (toString (toInt $manh4)) "inline" true) 
-        (sdict "name" "<:manh5:891678900038557717>" "value" (toString (toInt $manh5)) "inline" true) 
-        (sdict "name" "<:manh6:891678899388448838>" "value" (toString (toInt $manh6)) "inline" true)
-		(sdict "name" "<:manh7:891678899400998932>" "value" (toString (toInt $manh7)) "inline" true)
-		(sdict "name" "<:manh8:891678899472318514> " "value" (toString (toInt $manh8)) "inline" true)
-        (sdict "name" "<:manh9:891678899300352020>" "value" (toString (toInt $manh9)) "inline" true)
-        (sdict "name" "<:manh10:891678899371642931>" "value" (toString (toInt $manh10)) "inline" true)
-        (sdict "name" "<:manh11:891679629746798612>" "value" (toString (toInt $manh11)) "inline" true)
-        (sdict "name" "<:manh12:891678899120005190>" "value" (toString (toInt $manh12)) "inline" true)
-    ) 
+	"description" (print $res1 "\n" $res2 "\n" $res3)
 	"thumbnail" (sdict "url" $avatar) 
 }}
 
