@@ -77,6 +77,7 @@
     {{dbSet .User.ID "stringValue" $res}}
 
 {{else}}
+    {{$m := dbIncr .User.ID "countallevent" 1}}
     Bạn đã bị 👻 lấy mất mảnh {{.User.Mention}} . Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt.
 {{end}}
 

@@ -1,0 +1,5 @@
+{{$args := parseArgs 3 (print $prefix "dbset <ID/Mention> <Key> <Value>")
+	(carg "userid" "id")
+	(carg "string" "key")
+	(carg "string" "value")}}
+{{dbSet ($args.Get 0) ($args.Get 1) (toInt ($args.Get 2))}}

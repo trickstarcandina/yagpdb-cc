@@ -15,7 +15,7 @@
 
 {{if lt (toInt $check) 1}}
 
-{{if and (gt (toInt $msg) 14) (lt (toInt $msg) 30) (lt (toInt $check) 1)}}
+{{if and (gt (toInt $msg) 14) (lt (toInt $check) 1)}}
 {{ $totalticket = add $totalticket 1}}
 {{$a := dbIncr .User.ID "checkfull" 1}}
 {{$b := dbIncr .User.ID "countticket" 1}}
