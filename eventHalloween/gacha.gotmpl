@@ -78,10 +78,10 @@
 
 {{else}}
     {{$m := dbIncr .User.ID "countallevent" 1}}
-    Bạn đã bị 👻 lấy mất mảnh {{.User.Mention}} . Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt.
+    {{.User.Mention}} đã bị 👻 lấy mất mảnh  . Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt.
 {{end}}
 
 {{else}}
-Bạn đã hết số lượt quay.
+Bạn đã hết lượt quay. Hãy làm thêm nhiệm vụ ( xem tại ghim ) để kiếm lượt quay nhé
 
 {{end}}
