@@ -1,15 +1,15 @@
-{{/* <:manh1:891678899405217793>
-<:manh2:891678899262586942>
-<:manh3:891678899304529951>
-<:manh4:891678899413614633> 
-<:manh5:891678900038557717>
-<:manh6:891678899388448838>
-<:manh7:891678899400998932>
-<:manh8:891678899472318514> 
-<:manh9:891678899300352020>
-<:manh10:891678899371642931>
-<:manh11:891679629746798612>
-<:manh12:891678899120005190> */}}
+{{/* <:manh1:894603591740948540>
+<:manh2:894603591392845855>
+<:manh3:894603592168787979>
+<:manh4:894603591694843915> 
+<:manh5:894603591820664914>
+<:manh6:894603592235905054>
+<:manh7:894603591854219304>
+<:manh8:894603593032818728> 
+<:manh9:894603592344932392>
+<:manh10:894603592248475718>
+<:manh11:894603592214933597>
+<:manh12:894603592118456401> */}}
 
 
 {{ $totalticket := 0 }} 
@@ -35,33 +35,33 @@
 
 {{if gt (toInt $totalticket) 0}}
 
-{{$d := randInt 13}}
+{{$d := randInt 16}}
 
-{{if ne $d 12}}
+{{if lt $d 12}}
     {{if eq $d 0}}
-        {{sendMessage nil (printf "<:manh1:891678899405217793>")}} 
+        {{sendMessage nil (printf "<:manh1:894603591740948540>")}} 
     {{else if eq $d 1}}
-        {{sendMessage nil (printf "<:manh2:891678899262586942>")}}
+        {{sendMessage nil (printf "<:manh2:894603591392845855>")}}
     {{else if eq $d 2}} 
-        {{sendMessage nil (printf "<:manh3:891678899304529951>")}} 
+        {{sendMessage nil (printf "<:manh3:894603592168787979>")}} 
     {{else if eq $d 3}}
-        {{sendMessage nil (printf "<:manh4:891678899413614633> ")}} 
+        {{sendMessage nil (printf "<:manh4:894603591694843915>")}} 
     {{else if eq $d 4}}
-        {{sendMessage nil (printf "<:manh5:891678900038557717>")}} 
+        {{sendMessage nil (printf "<:manh5:894603591820664914>")}} 
     {{else if eq $d 5}}
-        {{sendMessage nil (printf "<:manh6:891678899388448838>")}} 
+        {{sendMessage nil (printf "<:manh6:894603592235905054>")}} 
     {{else if eq $d 6}}
-        {{sendMessage nil (printf "<:manh7:891678899400998932>")}} 
+        {{sendMessage nil (printf "<:manh7:894603591854219304>")}} 
     {{else if eq $d 7}}
-        {{sendMessage nil (printf "<:manh8:891678899472318514> ")}}
+        {{sendMessage nil (printf "<:manh8:894603593032818728> ")}}
     {{else if eq $d 8}}
-        {{sendMessage nil (printf "<:manh9:891678899300352020>")}}
+        {{sendMessage nil (printf "<:manh9:894603592344932392>")}}
     {{else if eq $d 9}}
-        {{sendMessage nil (printf "<:manh10:891678899371642931>")}}
+        {{sendMessage nil (printf "<:manh10:894603592248475718>")}}
     {{else if eq $d 10}}
-        {{sendMessage nil (printf "<:manh11:891679629746798612>")}}
+        {{sendMessage nil (printf "<:manh11:894603592214933597>")}}
     {{else if eq $d 11}}
-        {{sendMessage nil (printf "<:manh12:891678899120005190>")}}
+        {{sendMessage nil (printf "<:manh12:894603592118456401>")}}
     {{end}}
     là mảnh {{.User.Mention}} nhận được. Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt.
 
