@@ -1,15 +1,19 @@
-{{/* <:manh1:894603591740948540>
-<:manh2:894603591392845855>
-<:manh3:894603592168787979>
-<:manh4:894603591694843915> 
-<:manh5:894603591820664914>
-<:manh6:894603592235905054>
-<:manh7:894603591854219304>
-<:manh8:894603593032818728> 
-<:manh9:894603592344932392>
-<:manh10:894603592248475718>
-<:manh11:894603592214933597>
-<:manh12:894603592118456401> */}}
+{{/* <:m1:898401449258680320>
+<:m2:898401449174781962>
+<:m3:898401450961539152>
+<:m4:898401450210787399>
+<:m5:898401451573911592>
+<:m6:898401449397084221>
+<:m7:898401448998629417>
+<:m8:898401449246076938>
+<:m9:898401451167068200>
+<:m10:898401449174794280>
+<:m11:898401449376120933>
+<:m12:898401449178968064>
+<:m13:898401448751144971>
+<:m14:898401451116756992>
+<:m15:898401451670380564>
+<:m16:898401449615175710> */}}
 
 
 {{ $totalticket := 0 }} 
@@ -24,8 +28,8 @@
 
 {{if $stringValue}}
 {{else}}
-	{{dbSet .User.ID "stringValue" "F,F,F,F,F,F,F,F,F,F,F,F"}}
-    {{ $stringValue =  "F,F,F,F,F,F,F,F,F,F,F,F"}}
+	{{dbSet .User.ID "stringValue" "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
+    {{ $stringValue =  "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
 {{end}}
 
 {{ $countallevent := 0 }} 
@@ -35,46 +39,65 @@
 
 {{if gt (toInt $totalticket) 0}}
 
-{{$d := randInt 16}}
+{{$d := randInt 20}}
 
-{{if lt $d 12}}
+{{if lt $d 16}}
+    {{$dtwo := randInt 5}}
+
+    {{$m := dbIncr .User.ID "countallevent" 1}}
+    {{if and (eq $d 12) (gt $dtwo 0)}}
+    
+    {{else}}
+        {{$res := ""}}
+        {{range $k, $v := (split $stringValue ",")}} 
+            {{if eq (toInt $k) $d}}
+                {{$res = joinStr "," $res "T"}}
+            {{else}}
+                {{$res = joinStr "," $res $v}}
+            {{end}}
+        {{end}}
+        {{dbSet .User.ID "stringValue" $res}}
+    {{end}}
+
     {{if eq $d 0}}
-        {{sendMessage nil (printf "<:manh1:894603591740948540>")}} 
+        {{sendMessage nil (printf "<:m1:898401449258680320>")}} 
     {{else if eq $d 1}}
-        {{sendMessage nil (printf "<:manh2:894603591392845855>")}}
+        {{sendMessage nil (printf "<:m2:898401449174781962>")}}
     {{else if eq $d 2}} 
-        {{sendMessage nil (printf "<:manh3:894603592168787979>")}} 
+        {{sendMessage nil (printf "<:m3:898401450961539152>")}} 
     {{else if eq $d 3}}
-        {{sendMessage nil (printf "<:manh4:894603591694843915>")}} 
+        {{sendMessage nil (printf "<:m4:898401450210787399>")}} 
     {{else if eq $d 4}}
-        {{sendMessage nil (printf "<:manh5:894603591820664914>")}} 
+        {{sendMessage nil (printf "<:m5:898401451573911592>")}} 
     {{else if eq $d 5}}
-        {{sendMessage nil (printf "<:manh6:894603592235905054>")}} 
+        {{sendMessage nil (printf "<:m6:898401449397084221>")}} 
     {{else if eq $d 6}}
-        {{sendMessage nil (printf "<:manh7:894603591854219304>")}} 
+        {{sendMessage nil (printf "<:m7:898401448998629417>")}} 
     {{else if eq $d 7}}
-        {{sendMessage nil (printf "<:manh8:894603593032818728> ")}}
+        {{sendMessage nil (printf "<:m8:898401449246076938>")}}
     {{else if eq $d 8}}
-        {{sendMessage nil (printf "<:manh9:894603592344932392>")}}
+        {{sendMessage nil (printf "<:m9:898401451167068200>")}}
     {{else if eq $d 9}}
-        {{sendMessage nil (printf "<:manh10:894603592248475718>")}}
+        {{sendMessage nil (printf "<:m10:898401449174794280>")}}
     {{else if eq $d 10}}
-        {{sendMessage nil (printf "<:manh11:894603592214933597>")}}
+        {{sendMessage nil (printf "<:m11:898401449376120933>")}}
     {{else if eq $d 11}}
-        {{sendMessage nil (printf "<:manh12:894603592118456401>")}}
+        {{sendMessage nil (printf "<:m12:898401449178968064>")}}
+    {{else if eq $d 12}}
+        {{if eq $dtwo 0}}
+            {{sendMessage nil (printf "<:m13:898401448751144971>")}}
+        {{else}}
+            {{sendMessage nil (printf "<:m6:898401449397084221>")}} 
+        {{end}}
+    {{else if eq $d 13}}
+        {{sendMessage nil (printf "<:m14:898401451116756992>")}}
+    {{else if eq $d 14}}
+        {{sendMessage nil (printf "<:m15:898401451670380564>")}}
+    {{else if eq $d 15}}
+        {{sendMessage nil (printf "<:m16:898401449615175710>")}}
     {{end}}
     là mảnh {{.User.Mention}} nhận được. Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt.
 
-    {{$m := dbIncr .User.ID "countallevent" 1}}
-    {{$res := ""}}
-    {{range $k, $v := (split $stringValue ",")}} 
-        {{if eq (toInt $k) $d}}
-            {{$res = joinStr "," $res "T"}}
-        {{else}}
-            {{$res = joinStr "," $res $v}}
-        {{end}}
-    {{end}}
-    {{dbSet .User.ID "stringValue" $res}}
 
 {{else}}
     {{$m := dbIncr .User.ID "countallevent" 1}}

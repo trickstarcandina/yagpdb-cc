@@ -1,3 +1,20 @@
+{{/* <:m1:898401449258680320>
+<:m2:898401449174781962>
+<:m3:898401450961539152>
+<:m4:898401450210787399>
+<:m5:898401451573911592>
+<:m6:898401449397084221>
+<:m7:898401448998629417>
+<:m8:898401449246076938>
+<:m9:898401451167068200>
+<:m10:898401449174794280>
+<:m11:898401449376120933>
+<:m12:898401449178968064>
+<:m13:898401448751144971>
+<:m14:898401451116756992>
+<:m15:898401451670380564>
+<:m16:898401449615175710> */}}
+
 {{ $stringValue := 0 }} 
 {{ with dbGet .User.ID "stringValue" }}
 	{{ $stringValue = .Value }}
@@ -5,53 +22,67 @@
 
 {{if $stringValue}}
 {{else}}
-	{{dbSet .User.ID "stringValue" "F,F,F,F,F,F,F,F,F,F,F,F"}}
-    {{ $stringValue =  "F,F,F,F,F,F,F,F,F,F,F,F"}}
+	{{dbSet .User.ID "stringValue" "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
+    {{ $stringValue =  "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
 {{end}}
 
 {{$res1 := ""}}
 {{$res2 := ""}}
 {{$res3 := ""}}
+{{$res4 := ""}}
 {{range $k, $v := (split $stringValue ",")}} 
     {{if eq (toInt $k) 0}}
-        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:manh1:894603591740948540>"}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:m1:898401449258680320>"}}
 		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
 	{{else if eq (toInt $k) 1}}
-        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:manh2:894603591392845855>"}} 
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:m2:898401449174781962>"}} 
 		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
 	{{else if eq (toInt $k) 2}}
-        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:manh3:894603592168787979>"}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:m3:898401450961539152>"}}
 		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
 	{{else if eq (toInt $k) 3}}
-        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:manh4:894603591694843915>"}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:m4:898401450210787399>"}}
 		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
 
 	{{else if eq (toInt $k) 4}}
-        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:manh5:894603591820664914>"}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:m5:898401451573911592>"}}
 		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
 	{{else if eq (toInt $k) 5}}
-        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:manh6:894603592235905054>"}} 
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:m6:898401449397084221>"}} 
 		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
 	{{else if eq (toInt $k) 6}}
-        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:manh7:894603591854219304>"}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:m7:898401448998629417>"}}
 		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
 	{{else if eq (toInt $k) 7}}
-        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:manh8:894603593032818728>"}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:m8:898401449246076938>"}}
 		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
   
 	{{else if eq (toInt $k) 8}}
-        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:manh9:894603592344932392>"}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:m9:898401451167068200>"}}
 		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
 	{{else if eq (toInt $k) 9}}
-        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:manh10:894603592248475718>"}} 
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:m10:898401449174794280>"}} 
 		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
 	{{else if eq (toInt $k) 10}}
-        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:manh11:894603592214933597>"}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:m11:898401449376120933>"}}
 		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
 	{{else if eq (toInt $k) 11}}
-        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:manh12:894603592118456401>"}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:m12:898401449178968064>"}}
 		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
 	
+	{{else if eq (toInt $k) 12}}
+        {{if eq $v "T"}} {{$res4 = joinStr "" $res4 "<:m13:898401448751144971>"}}
+		{{else}} {{$res4 = joinStr "" $res4 "❔"}} {{end}}
+	{{else if eq (toInt $k) 13}}
+        {{if eq $v "T"}} {{$res4 = joinStr "" $res4 "<:m14:898401451116756992>"}} 
+		{{else}} {{$res4 = joinStr "" $res4 "❔"}} {{end}}
+	{{else if eq (toInt $k) 14}}
+        {{if eq $v "T"}} {{$res4 = joinStr "" $res4 "<:m15:898401451670380564>"}}
+		{{else}} {{$res4 = joinStr "" $res4 "❔"}} {{end}}
+	{{else if eq (toInt $k) 15}}
+        {{if eq $v "T"}} {{$res4 = joinStr "" $res4 "<:m16:898401449615175710>"}}
+		{{else}} {{$res4 = joinStr "" $res4 "❔"}} {{end}}
+
     {{end}}
 {{end}}
 
@@ -61,7 +92,7 @@
 {{$embed := sdict
 	"title" (joinStr "" "❯ Bức tranh của "  .User.Username) 
 	"color" $color
-	"description" (print $res1 "\n" $res2 "\n" $res3)
+	"description" (print $res1 "\n" $res2 "\n" $res3 "\n" $res4)
 	"thumbnail" (sdict "url" $avatar) 
 }}
 
