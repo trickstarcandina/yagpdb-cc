@@ -1,0 +1,17 @@
+{{ $totalticket := 0 }} 
+{{ with dbGet .User.ID "countticket" }}
+	{{ $totalticket = .Value }}
+{{ end }}
+
+{{ $daily := 0 }} 
+{{ with dbGet .User.ID "eventdaily" }}
+	{{ $daily = .Value }}
+{{ end }}
+
+{{if eq (toInt $daily) 0}}
+{{ $b := dbIncr .User.ID "eventdaily" 1 }}
+{{ $s := dbIncr .User.ID "countticket" 2 }}
+{{.User.Mention}} Chúc mừng bạn nhận 2 lượt mở ngày hôm nay, bạn đang có {{$s}} lượt, mở bằng lệnh -open.
+{{else}}
+{{.User.Mention}} đã điểm danh hôm nay. Sau 19h quay lại nhé.
+{{end}}
