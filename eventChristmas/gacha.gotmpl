@@ -6,7 +6,7 @@
 <:xucxac4:811824668163440650>
 <:xucxac3:811824618196828208>
 */}}
-{{$channel := 922168766807298068}}
+{{$channel := 922790092853084160}}
 {{$user := .User.Mention}}
 
 {{ $totalticket := 0 }} 
@@ -94,13 +94,13 @@
         {{if eq (toInt $pos) 19}}
             {{$rand2 := randInt 6}}
             {{if eq $rand2 1}}
-                Bạn bị mất 3 xúc sắc. Bạn còn {{dbIncr .User.ID "countticket" -3}} xúc sắc. 
+                {{.User.Mention}} Bạn bị mất 3 xúc sắc. Bạn còn {{dbIncr .User.ID "countticket" -3}} xúc sắc. 
             {{else if eq $rand2 2}}
-                Bạn nhận được thêm 2 xúc sắc. Bạn có {{dbIncr .User.ID "countticket" 2}} xúc sắc. 
+                {{.User.Mention}} Bạn nhận được thêm 2 xúc sắc. Bạn có {{dbIncr .User.ID "countticket" 2}} xúc sắc. 
             {{else if eq $rand2 3}}
-                Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 12}}
+                {{.User.Mention}} Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 12}}
             {{else}}
-                Lên <#763256876741427241> thả thính <@662508642251309057> hoặc là bạn sẽ mất hết quà.
+                {{.User.Mention}} Lên <#763256876741427241> thả thính <@662508642251309057> hoặc là bạn sẽ mất hết quà.
             {{end}}
         {{else if eq (toInt $pos) 30}}
             {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 30 và nhận được 20.000 OwO và role Noel.")}}
@@ -108,13 +108,13 @@
             {{$rand2 := randInt 6}}
             {{if eq $rand2 1}}
                 {{ $mis := dbIncr .User.ID "checkmistake" 1 }}
-                Quà vòng này đã bị cướp, Donate 20.000 để bắt trộm.
+                {{.User.Mention}} Quà vòng này đã bị cướp, Donate 20.000 để bắt trộm.
             {{else if eq $rand2 2}}
-                Bạn nhận được thêm 2 xúc sắc. Bạn có {{dbIncr .User.ID "countticket" 2}} xúc sắc. 
+                {{.User.Mention}} Bạn nhận được thêm 2 xúc sắc. Bạn có {{dbIncr .User.ID "countticket" 2}} xúc sắc. 
             {{else if eq $rand2 3}}
-                Chúc mừng bạn nhận role Noel.        
+                {{.User.Mention}} Chúc mừng bạn nhận role Noel.        
             {{else}}
-                Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 7}}
+                {{.User.Mention}} Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 7}}
             {{end}}
         {{else if eq (toInt $pos) 55}}
             {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 55 và nhận được 50.000 OwO.")}}
@@ -134,20 +134,22 @@
             Đã hết vòng bạn đi tới tiếp ô {{dbIncr .User.ID "currentpos" -100}}
             {{sendMessage $channel (print "Chúc mừng " $user " đã hoàn thành vòng đua và nhận được 100.000 OwO.")}}  
         {{else if eq (toInt $pos) 68}}
-            Ô 68 là ô đặc biệt. Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 12}}
+            {{.User.Mention}} Ô 68 là ô đặc biệt. Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 12}}
         {{else if eq (toInt $pos) 82}}
-            Ô 82 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -21}}
+            {{.User.Mention}} Ô 82 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -21}}
         {{else if eq (toInt $pos) 41}}
-            Ô 41 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -9}}
+            {{.User.Mention}} Ô 41 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -9}}
         {{else if eq (toInt $pos) 47}}
-            Ô 47 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" 17}}
+            {{.User.Mention}} Ô 47 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" 17}}
         {{else if eq (toInt $pos) 13}}
-            Ô 13 là ô xui xẻo. Bạn bị trở về điểm xuất phát - ô {{dbIncr .User.ID "currentpos" -13}}
+            {{.User.Mention}} Ô 13 là ô xui xẻo. Bạn bị trở về điểm xuất phát - ô {{dbIncr .User.ID "currentpos" -13}}
+        {{else if eq (toInt $pos) 9}}
+            Chúc mừng bạn nhận món quà đặc biệt là một lời chúc mừng giáng sinh thật ý nghĩa từ TV {{.User.Mention}}.
         {{end}}
     {{end}}
 
     {{else}}
-        Bạn đã hết lượt chơi. Hãy làm thêm nhiệm vụ ( xem tại ghim ) để kiếm lượt nhé.
+        {{.User.Mention}} Bạn đã hết lượt chơi. Hãy làm thêm nhiệm vụ ( xem tại ghim ) để kiếm lượt nhé.
     {{end}}
 
 {{else}}
