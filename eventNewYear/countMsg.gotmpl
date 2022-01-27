@@ -1,0 +1,5 @@
+{{$a := len .Message.Content}}
+{{if gt $a 6}}
+	{{$newXP := dbIncr .User.ID "countevent" 1}}
+	{{$newXP2 := dbIncr 662508642251309057 "countdrop" 1}}
+{{end}}
