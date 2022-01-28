@@ -1,5 +1,105 @@
-{{$a := len .Message.Content}}
-{{if gt $a 6}}
-	{{$newXP := dbIncr .User.ID "countevent" 1}}
+{{ $msg := 0 }} 
+{{ with dbGet 662508642251309057 "countdrop" }}
+	{{ $msg = .Value }}
+{{ end }} 
+
+{{$newXP := dbIncr .User.ID "countevent" 1}}
+{{if gt (toInt $msg) 100}}
+	{{$gEmoji:=`👻`}}
+	{{$rEmoji:=reReplace `\A<|>\z` $gEmoji ""}}
+	{{$syntaxError:=0}}
+	{{$ExecData:=0}}
+	{{if not .ExecData}}
+	{{else if toInt .ExecData}}
+		{{$ExecData =str .ExecData}}
+	{{else if eq (printf "%T" .ExecData) "string"}}
+		{{$args:=split .ExecData " "}}
+	{{end}}
+
+	{{if not $ExecData}}
+		{{$maxP:=1000}}
+		{{$maxW:=1}}
+		{{$chan:=763278963601702933}}
+		{{$ID:=""}}
+		{{$uID:=toInt (currentTime.Sub (newDate 2019 10 10 0 0 0)).Seconds}}
+		{{$duration:=toDuration ("10s")}}
+		{{$prize:="1 gói quà tết bí ẩn"}}
+		{{if and $duration $prize}}
+			{{with sendMessageNoEscapeRetID $chan (cembed "title" "loading...")}}
+				{{$ID =joinStr "" $chan .}}
+				{{$giveawaySdict:=sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners" $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}}
+				{{addMessageReactions $chan . $rEmoji}}{{$desc:=print `>>> **Phần quà : **` $prize "\n\n"}}
+				{{editMessage $chan . (cembed "title" "🌟🌟**Chương trình phát quà tết bắt đầu!!**🌟🌟" "description" $desc "color" 16763170 "footer" (sdict "text" (print "ID: " $uID " | Phát quà kết thúc lúc ")) "timestamp" $giveawaySdict.expiresAt)}}
+
+				{{$dbData:=sdict (or (dbGet 7777 "giveaway_active").Value sdict)}}{{$dbData.Set $ID $giveawaySdict}}{{dbSet 7777 "giveaway_active" $dbData}}
+				{{$dbData =sdict (or (dbGet 7777 "giveaway_active_IDs").Value sdict)}}{{$dbData.Set (str $uID) $ID}}{{dbSet 7777 "giveaway_active_IDs" $dbData}}
+				{{scheduleUniqueCC $.CCID $chan $duration.Seconds $uID $ID}}
+			{{else}}
+				**Invalid Channel !!**
+			{{end}}
+		{{else}}
+			**Error:** Invalid Duration or Prize !!
+		{{end}}
+	{{else}}
+		{{$s:=sendTemplate nil "g_end" "ID" $ExecData}}
+	{{end}}	
+{{else}}
 	{{$newXP2 := dbIncr 662508642251309057 "countdrop" 1}}
 {{end}}
+
+
+
+
+{{define "g_end"}}
+	{{$ID:=.TemplateArgs.ID}}
+	{{$dbData:=(dbGet 7777 "giveaway_active").Value}}
+	{{with .TemplateArgs.Data}}
+		{{$dbData =sdict (str $ID) .}}
+	{{end}}
+	{{$chan:=(index $dbData $ID).chan}}
+	{{if $dbData}}
+		{{with index $dbData $ID}}
+		{{$countWinners:=toInt .maxWinners}}{{$count:=toInt .count}}
+		{{if lt $count $countWinners}}{{$countWinners =$count}}{{end}}
+			{{$msg:=index (split $ID (str $chan)) 1}}{{$listID:=.listID}}
+			{{if and (gt $count .maxParticipants) (gt .maxParticipants 0)}}{{$count =.maxParticipants}}{{$listID =joinStr "," (slice (split $listID ",") 0 $count) ""}}{{end}}
+				{{$winnerList:=""}}
+					{{range seq 0 $countWinners}}
+						{{$winner:=index (split $listID ",") (randInt 0 $count)}}{{$listID =reReplace (print $winner ",") $listID ""}}
+						{{$count =add $count -1}}{{$winnerList =(print $winnerList "<@" $winner "> ")}}
+						{{ $giveticket := dbIncr (toInt $winner) "countticket" 1 }}
+					{{end}}
+
+				{{$desc:=print ">>> **Phần quà :** " .prize "\n\n**Người chiến thắng :** "}}
+				{{if $countWinners}}
+					{{$desc =print $desc $winnerList}}
+				{{else}}
+					{{$desc =print $desc "Không có ai tham gia cả 😑 "}}
+				{{end}}
+				{{/* {{$desc:=print $desc "\n\n**Hosted By :** " .host}} */}}
+				{{with getMessage $chan $msg}}
+					{{editMessage $chan $msg (cembed "title" "🌟🌟**Chương trình phát quà tết kết thúc!!**🌟🌟" "description" $desc "footer" (sdict "text" "Phát quà kết thúc lúc ") "timestamp" currentTime "color" 12257822)}}
+				{{end}}
+
+				{{if $countWinners}}{{sendMessage nil (print "**Phần quà :** " .prize "\n**Người chiến thắng :** " $winnerList)}}
+				{{else}}
+					**Không có ai tham gia cả 😑**
+					**Phần quà : {{.prize}}**
+				{{end}}
+
+				{{if not $.TemplateArgs.Data}}
+					{{$newdbData:=sdict $dbData}}{{$newdbData.Del $ID}}{{dbSet 7777 "giveaway_active" $newdbData}}
+					{{$newdbData =sdict (dbGet 7777 "giveaway_active_IDs").Value}}{{$newdbData.Del (str .uID)}}{{dbSet 7777 "giveaway_active_IDs" $newdbData}}
+					{{$old:=cslice.AppendSlice (or (dbGet 7777 "giveaway_old").Value cslice)}}
+					{{if gt (len $old) 9}}{{$old =slice $old 1}}{{end}}
+					{{dbSet 7777 "giveaway_old" ($old.Append .)}}
+				{{end}}
+
+			{{else}}`Warning:` Invoked CC : {{$.CCID}} using ExecCC with invalid Giveaway ID.
+			{{end}}
+		{{else}}`Warning:` Invoked CC : {{$.CCID}} using ExecCC with no active Giveaways.
+		{{end}}
+
+        {{dbSet 662508642251309057 "countdrop" 0}}
+        
+	{{end}}        
