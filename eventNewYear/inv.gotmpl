@@ -1,0 +1,25 @@
+{{ $wordm := 0 }} 
+{{ with dbGet .User.ID "banhchung" }}
+	{{ $wordm = .Value }}
+{{ end }}
+
+{{ $wordo := 0 }} 
+{{ with dbGet .User.ID "banhtet" }}
+	{{ $wordo = .Value }}
+{{ end }}
+
+
+{{ $user := .User }} 
+{{ $color := 14232643 }} 
+{{ $avatar := (joinStr "" "https://cdn.discordapp.com/avatars/" (toString .User.ID) "/" .User.Avatar ".png") }}
+{{$embed := sdict
+	"title" (joinStr "" "❯ Kho đồ của "  .User.Username "!") 
+	"color" $color
+	"fields" (cslice 
+        (sdict "name" "<:banhchung:936952715630760016>" "value" (toString (toInt $wordm)) "inline" true) 
+        (sdict "name" "<:banhtet:936952714565402634>" "value" (toString (toInt $wordo)) "inline" true) 
+    ) 
+	"thumbnail" (sdict "url" $avatar) 
+}}
+
+{{ sendMessage nil (cembed $embed) }}

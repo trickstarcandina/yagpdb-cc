@@ -8,42 +8,11 @@
 	{{ $totalticket = .Value }}
 {{ end }} 
 
-{{ $check := 0 }} 
-{{ with dbGet .User.ID "checkfull" }}
-	{{ $check = .Value }}
-{{ end }} 
-
-{{/* 6/12/25/50 */}}
-
-{{if lt (toInt $check) 4}}
-
-{{if and (gt (toInt $msg) 6) (lt (toInt $msg) 11) (lt (toInt $check) 1)}}
-{{ $totalticket = add $totalticket 1}}
-{{$a := dbIncr .User.ID "checkfull" 1}}
-{{$b := dbIncr .User.ID "countticket" 1}}
-
-{{else if and (gt (toInt $msg) 12) (lt (toInt $msg) 24) (lt (toInt $check) 2)}}
-{{ $totalticket = add $totalticket (sub 2 $check)}}
-{{$a := dbIncr .User.ID "checkfull" (sub 2 $check)}}
-{{$b := dbIncr .User.ID "countticket" (sub 2 $check)}}
-
-{{else if and (gt (toInt $msg) 25) (lt (toInt $msg) 49) (lt (toInt $check) 3)}}
-{{ $totalticket = add $totalticket (sub 3 $check)}}
-{{$a := dbIncr .User.ID "checkfull" (sub 3 $check)}}
-{{$b := dbIncr .User.ID "countticket" (sub 3 $check)}}
-
-{{else if and (gt (toInt $msg) 50) (lt (toInt $check) 4)}}
-{{ $totalticket = add $totalticket (sub 4 $check)}}
-{{$a := dbIncr .User.ID "checkfull" (sub 4 $check)}}
-{{$b := dbIncr .User.ID "countticket" (sub 4 $check)}}
-
+{{if gt (toInt $msg) 50}}
+{{$newtick := div $msg 50}}
+{{$totalticket = add $totalticket $newtick}}
+{{$b := dbIncr .User.ID "countticket" $newtick}}
+{{dbSet .User.ID "countevent" (mod $msg 50)}}
 {{end}}
 
 {{.User.Mention}} bạn đã chat {{$msg}} tin nhắn. Bạn có {{ $totalticket }} lượt.
-
-{{else}}
-
-{{.User.Mention}} bạn đã chat {{$msg}} tin nhắn. Bạn có {{ $totalticket }} lượt.
-Bạn đã nhận hết lượt từ chat, hãy voice thêm để kiếm thêm lượt nhé.
-
-{{end}}

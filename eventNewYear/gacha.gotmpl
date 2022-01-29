@@ -1,157 +1,26 @@
 {{/* 
-<:xucxac1:811824464798547998>
-<:xucxac2:811824559304605697>
-<:xucxac6:811824820026867732>
-<:xucxac5:811824722794905630>
-<:xucxac4:811824668163440650>
-<:xucxac3:811824618196828208>
+<:banhchung:936952715630760016>
+<:banhtet:936952714565402634>
 */}}
-{{$channel := 922790092853084160}}
-{{$user := .User.Mention}}
-
 {{ $totalticket := 0 }} 
 {{ with dbGet .User.ID "countticket" }}
 	{{ $totalticket = .Value }}
 {{ end }}
 
-{{ $currentpos := 0 }} 
-{{ with dbGet .User.ID "currentpos" }}
-	{{ $currentpos = .Value }}
-{{ end }}
-{{if $currentpos}}
-{{else}}
-	{{dbSet .User.ID "currentpos" (toInt 0)}}
-    {{ $currentpos = (toInt 0)}}
+{{if gt (toInt $totalticket) 0}}
+
+{{$d := randInt 2}}
+
+{{if eq $d 0}}
+{{sendMessage nil (printf "<:banhchung:936952715630760016>")}} 
+{{$a := dbIncr .User.ID "banhchung" 1}}
+{{else if eq $d 1}}
+{{sendMessage nil (printf "<:banhtet:936952714565402634>")}}
+{{$a := dbIncr .User.ID "banhtet" 1}}
 {{end}}
-
-{{ $mistake := 0 }} 
-{{ with dbGet .User.ID "checkmistake" }}
-	{{ $mistake = .Value }}
-{{ end }}
-
-{{if eq (toInt $mistake) 0}}
-    {{if gt (toInt $totalticket) 0}}
-        {{$rand1 := randInt 7}}
-        {{$pos := dbIncr .User.ID "currentpos" $rand1}}
-        {{$m := dbIncr .User.ID "countallevent" $rand1}}
-        {{if eq $rand1 1}}
-            {{sendMessage nil (printf "<:xucxac1:811824464798547998>")}}
-        {{else if eq $rand1 2}}
-            {{sendMessage nil (printf "<:xucxac2:811824559304605697>")}}
-        {{else if eq $rand1 3}}
-            {{sendMessage nil (printf "<:xucxac3:811824618196828208>")}}
-        {{else if eq $rand1 4}}
-            {{sendMessage nil (printf "<:xucxac4:811824668163440650>")}}
-        {{else if eq $rand1 5}}
-            {{sendMessage nil (printf "<:xucxac5:811824722794905630>")}}
-        {{else if eq $rand1 6}}
-            {{sendMessage nil (printf "<:xucxac6:811824820026867732>")}}
-        {{else}}
-            {{sendMessage nil (printf "Bạn đã bị 👻 lấy cắp xúc sắc.")}}
-        {{end}}
-        {{$countxucsac := dbIncr .User.ID "countticket" -1}}
-        {{sendMessage nil (print $user " bạn đã đến ô " $pos ". Bạn còn " $countxucsac " xúc sắc.")}}
-    {{/* Resolve cell special */}}
-    {{/* 
-    key 
-    - "countticket"s
-    - "countevent"
-    - "eventdaily"
-    - "checkfull"
-
-
-    - "currentpos"
-    - "countallevent"
-    - "checkmistake"
-
-
-    19 : khí vận : 
-    - mất hết số xúc xắc hiện có ( 2/10 )
-    - Thả thính 1 Mod khác giới vài câu ( 3/10 )
-    - Nhảy đến ô 31 ( 2/10 )
-    - Được tặng 2 viên xúc xắc ( 3/10 )
-    30 : Quà : 20.000owo + Role Noel 
-    50 : khí vận : 
-    - Nhảy đến vô 57 ( 2/10 )
-    - Quà vòng này đã bị cướp, Donate 20.000 để bắt trộm ( 3/10 )
-    - Nhận 2 xúc xắc miễn phí ( 3/10 )
-    - Nhận Roles Noel ( 2/10 )
-    55 : Quà : 50.000owo 
-    85 : Quà 80.000owo 
-    100 : Quà
-    - 500.000owo : ( 1/10 )
-    - 200.000owo : ( 2/10 )
-    - 100.000owo ( 7/10 )
-    Hết vòng : 100.000owo
-
-    68 lọt 80
-    82 lọt về 61
-    41 về 32
-    47 lên 64
-    13 về 0
-    */}}
-    {{if gt (toInt $rand1) 0}}
-        {{if eq (toInt $pos) 19}}
-            {{$rand2 := randInt 6}}
-            {{if eq $rand2 1}}
-                {{.User.Mention}} Bạn bị mất 3 xúc sắc. Bạn còn {{dbIncr .User.ID "countticket" -3}} xúc sắc. 
-            {{else if eq $rand2 2}}
-                {{.User.Mention}} Bạn nhận được thêm 2 xúc sắc. Bạn có {{dbIncr .User.ID "countticket" 2}} xúc sắc. 
-            {{else if eq $rand2 3}}
-                {{.User.Mention}} Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 12}}
-            {{else}}
-                {{.User.Mention}} Lên <#763256876741427241> thả thính <@662508642251309057> hoặc là bạn sẽ mất hết quà.
-            {{end}}
-        {{else if eq (toInt $pos) 30}}
-            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 30 và nhận được 20.000 OwO và role Noel.")}}
-        {{else if eq (toInt $pos) 50}}
-            {{$rand2 := randInt 6}}
-            {{if eq $rand2 1}}
-                {{ $mis := dbIncr .User.ID "checkmistake" 1 }}
-                {{.User.Mention}} Quà vòng này đã bị cướp, Donate 20.000 để bắt trộm.
-            {{else if eq $rand2 2}}
-                {{.User.Mention}} Bạn nhận được thêm 2 xúc sắc. Bạn có {{dbIncr .User.ID "countticket" 2}} xúc sắc. 
-            {{else if eq $rand2 3}}
-                {{.User.Mention}} Chúc mừng bạn nhận role Noel.        
-            {{else}}
-                {{.User.Mention}} Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 7}}
-            {{end}}
-        {{else if eq (toInt $pos) 55}}
-            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 55 và nhận được 50.000 OwO.")}}
-        {{else if eq (toInt $pos) 85}}
-            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 85 và nhận được 80.000 OwO.")}}
-        {{else if eq (toInt $pos) 100}}
-            {{$rand2 := randInt 10}}
-            {{if eq $rand2 1}}
-                {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 500.000 OwO.")}}
-            {{else if eq $rand2 2}}
-                {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 200.000 OwO.")}}  
-            {{else}}
-                {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 100.000 OwO.")}}  
-            {{end}}
-        {{else if gt (toInt $pos) 100}}
-            {{/* reset */}}
-            Đã hết vòng bạn đi tới tiếp ô {{dbIncr .User.ID "currentpos" -100}}
-            {{sendMessage $channel (print "Chúc mừng " $user " đã hoàn thành vòng đua và nhận được 100.000 OwO.")}}  
-        {{else if eq (toInt $pos) 68}}
-            {{.User.Mention}} Ô 68 là ô đặc biệt. Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 12}}
-        {{else if eq (toInt $pos) 82}}
-            {{.User.Mention}} Ô 82 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -21}}
-        {{else if eq (toInt $pos) 41}}
-            {{.User.Mention}} Ô 41 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -9}}
-        {{else if eq (toInt $pos) 47}}
-            {{.User.Mention}} Ô 47 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" 17}}
-        {{else if eq (toInt $pos) 13}}
-            {{.User.Mention}} Ô 13 là ô xui xẻo. Bạn bị trở về điểm xuất phát - ô {{dbIncr .User.ID "currentpos" -13}}
-        {{else if eq (toInt $pos) 9}}
-            Chúc mừng bạn nhận món quà đặc biệt là một lời chúc mừng giáng sinh thật ý nghĩa từ TV {{.User.Mention}}.
-        {{end}}
-    {{end}}
-
-    {{else}}
-        {{.User.Mention}} Bạn đã hết lượt chơi. Hãy làm thêm nhiệm vụ ( xem tại ghim ) để kiếm lượt nhé.
-    {{end}}
+là bánh {{.User.Mention}} nhận được. Bạn còn {{dbIncr .User.ID "countticket" -1}} hộp bánh.
 
 {{else}}
-    {{.User.Mention}} bạn chưa thực hiện hình phạt, hãy thực hiện hình phạt trước.
+Bạn đã hết số lượt.
+
 {{end}}

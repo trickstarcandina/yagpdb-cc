@@ -3,6 +3,11 @@
 	{{ $msg = .Value }}
 {{ end }} 
 
+{{ $flag := 0 }} 
+{{ with dbGet 662508642251309057 "flag" }}
+	{{ $flag = .Value }}
+{{ end }} 
+
 {{$newXP := dbIncr .User.ID "countevent" 1}}
 {{if gt (toInt $msg) 100}}
 	{{$gEmoji:=`👻`}}
@@ -17,31 +22,39 @@
 	{{end}}
 
 	{{if not $ExecData}}
-		{{$maxP:=1000}}
-		{{$maxW:=1}}
-		{{$chan:=763278963601702933}}
-		{{$ID:=""}}
-		{{$uID:=toInt (currentTime.Sub (newDate 2019 10 10 0 0 0)).Seconds}}
-		{{$duration:=toDuration ("10s")}}
-		{{$prize:="1 gói quà tết bí ẩn"}}
-		{{if and $duration $prize}}
-			{{with sendMessageNoEscapeRetID $chan (cembed "title" "loading...")}}
-				{{$ID =joinStr "" $chan .}}
-				{{$giveawaySdict:=sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners" $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}}
-				{{addMessageReactions $chan . $rEmoji}}{{$desc:=print `>>> **Phần quà : **` $prize "\n\n"}}
-				{{editMessage $chan . (cembed "title" "🌟🌟**Chương trình phát quà tết bắt đầu!!**🌟🌟" "description" $desc "color" 16763170 "footer" (sdict "text" (print "ID: " $uID " | Phát quà kết thúc lúc ")) "timestamp" $giveawaySdict.expiresAt)}}
+		{{if eq (toInt $flag) 0}}
+			{{$flagIncr := dbIncr 662508642251309057 "flag" 1}}
 
-				{{$dbData:=sdict (or (dbGet 7777 "giveaway_active").Value sdict)}}{{$dbData.Set $ID $giveawaySdict}}{{dbSet 7777 "giveaway_active" $dbData}}
-				{{$dbData =sdict (or (dbGet 7777 "giveaway_active_IDs").Value sdict)}}{{$dbData.Set (str $uID) $ID}}{{dbSet 7777 "giveaway_active_IDs" $dbData}}
-				{{scheduleUniqueCC $.CCID $chan $duration.Seconds $uID $ID}}
+			{{$maxP:=1000}}
+			{{$maxW:=1}}
+			{{$chan:=763256876741427241}}
+			{{$ID:=""}}
+			{{$uID:=toInt (currentTime.Sub (newDate 2019 10 10 0 0 0)).Seconds}}
+			{{$duration:=toDuration ("30s")}}
+			{{$prize:="1 gói quà tết bí ẩn"}}
+			{{if and $duration $prize}}
+				{{with sendMessageNoEscapeRetID $chan (cembed "title" "loading...")}}
+					{{$ID =joinStr "" $chan .}}
+					{{$giveawaySdict:=sdict "chan" $chan "count" 0 "ID" $ID "listID" "" "maxWinners" $maxW "maxParticipants" $maxP "expiresAt" (currentTime.Add $duration) "prize" $prize "uID" $uID "host" $.User.Mention}}
+					{{addMessageReactions $chan . $rEmoji}}{{$desc:=print `>>> **Phần quà : **` $prize "\n\n"}}
+					{{editMessage $chan . (cembed "title" "🌟🌟**Chương trình phát quà tết bắt đầu!!**🌟🌟" "description" $desc "color" 16763170 "footer" (sdict "text" (print "ID: " $uID " | Phát quà kết thúc lúc ")) "timestamp" $giveawaySdict.expiresAt)}}
+
+					{{$dbData:=sdict (or (dbGet 7777 "giveaway_active").Value sdict)}}{{$dbData.Set $ID $giveawaySdict}}{{dbSet 7777 "giveaway_active" $dbData}}
+					{{$dbData =sdict (or (dbGet 7777 "giveaway_active_IDs").Value sdict)}}{{$dbData.Set (str $uID) $ID}}{{dbSet 7777 "giveaway_active_IDs" $dbData}}
+					{{scheduleUniqueCC $.CCID $chan $duration.Seconds $uID $ID}}
+				{{else}}
+					**Invalid Channel !!**
+				{{end}}
 			{{else}}
-				**Invalid Channel !!**
+				**Error:** Invalid Duration or Prize !!
 			{{end}}
-		{{else}}
-			**Error:** Invalid Duration or Prize !!
 		{{end}}
 	{{else}}
-		{{$s:=sendTemplate nil "g_end" "ID" $ExecData}}
+		{{if gt (toInt $flag) 0}}
+			{{$flagIncr := dbIncr 662508642251309057 "flag" -1}}
+			{{dbSet 662508642251309057 "countdrop" 0}}
+			{{$s:=sendTemplate nil "g_end" "ID" $ExecData}}
+		{{end}}
 	{{end}}	
 {{else}}
 	{{$newXP2 := dbIncr 662508642251309057 "countdrop" 1}}
@@ -90,16 +103,11 @@
 				{{if not $.TemplateArgs.Data}}
 					{{$newdbData:=sdict $dbData}}{{$newdbData.Del $ID}}{{dbSet 7777 "giveaway_active" $newdbData}}
 					{{$newdbData =sdict (dbGet 7777 "giveaway_active_IDs").Value}}{{$newdbData.Del (str .uID)}}{{dbSet 7777 "giveaway_active_IDs" $newdbData}}
-					{{$old:=cslice.AppendSlice (or (dbGet 7777 "giveaway_old").Value cslice)}}
-					{{if gt (len $old) 9}}{{$old =slice $old 1}}{{end}}
-					{{dbSet 7777 "giveaway_old" ($old.Append .)}}
 				{{end}}
 
 			{{else}}`Warning:` Invoked CC : {{$.CCID}} using ExecCC with invalid Giveaway ID.
 			{{end}}
 		{{else}}`Warning:` Invoked CC : {{$.CCID}} using ExecCC with no active Giveaways.
 		{{end}}
-
-        {{dbSet 662508642251309057 "countdrop" 0}}
         
 	{{end}}        
