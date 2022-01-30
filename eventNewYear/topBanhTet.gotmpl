@@ -1,0 +1,24 @@
+{{ $page := 1 }} 
+{{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }}
+{{ $nextTo := mult (sub $page 1) 10 }} 
+{{ $users := dbTopEntries "banhtet" 10 $nextTo }} 
+{{ if not (len $users) }}
+	Không có ai ở trang này :(
+{{ else }}
+	{{ $rank := $nextTo }} 
+	{{ $display := "" }} 
+	{{- range $users -}}
+		{{ $xp := toInt .Value }}
+		{{ $rank = add $rank 1 }} 
+		{{ $display = printf "%s\n• **%d.** [%s](https://www.youtube.com/watch?v=9kaCAbIXuyg) :: Số lượng (%d 🥮)"
+			$display $rank .User.String $xp
+		}} 
+	{{- end -}}
+	{{ $id := sendMessageRetID nil (cembed
+		"title" "❯ Bảng xếp hạng bánh Tét"
+		"thumbnail" (sdict "url" "https://cdn.tgdd.vn/Files/2020/11/18/1307586/dan-trong-nghe-mach-cach-xao-nep-goi-banh-tet-thom-ngon-hap-dan-202011181349419001.jpg")
+		"color" 14232643
+		"description" $display
+		"footer" (sdict "text" (joinStr "" "Trang " $page))) 
+	}} 
+{{end}}

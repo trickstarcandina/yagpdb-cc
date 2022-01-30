@@ -10,8 +10,8 @@
 
 {{if gt (toInt $msg) 50}}
 {{$newtick := div $msg 50}}
-{{$totalticket = add $totalticket $newtick}}
-{{$b := dbIncr .User.ID "countticket" $newtick}}
+{{$totalticket = add $totalticket (toInt $newtick)}}
+{{$b := dbIncr .User.ID "countticket" (toInt $newtick)}}
 {{dbSet .User.ID "countevent" (mod $msg 50)}}
 {{end}}
 

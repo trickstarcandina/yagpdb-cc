@@ -1,0 +1,24 @@
+{{ $page := 1 }} 
+{{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }}
+{{ $nextTo := mult (sub $page 1) 10 }} 
+{{ $users := dbTopEntries "banhchung" 10 $nextTo }} 
+{{ if not (len $users) }}
+	Không có ai ở trang này :(
+{{ else }}
+	{{ $rank := $nextTo }} 
+	{{ $display := "" }} 
+	{{- range $users -}}
+		{{ $xp := toInt .Value }}
+		{{ $rank = add $rank 1 }} 
+		{{ $display = printf "%s\n• **%d.** [%s](https://www.youtube.com/watch?v=9kaCAbIXuyg) :: Số lượng (%d 🥮)"
+			$display $rank .User.String $xp
+		}} 
+	{{- end -}}
+	{{ $id := sendMessageRetID nil (cembed
+		"title" "❯ Bảng xếp hạng bánh Chưng"
+		"thumbnail" (sdict "url" "https://file1.dangcongsan.vn/data/0/images/2021/02/08/duongntcd/13-chung-tet-td.jpg?dpi=150&quality=100&w=680")
+		"color" 14232643
+		"description" $display
+		"footer" (sdict "text" (joinStr "" "Trang " $page))) 
+	}} 
+{{end}}

@@ -8,8 +8,12 @@
 	{{ $flag = .Value }}
 {{ end }} 
 
+{{$a := len .Message.Content}}
+{{if gt $a 6}}
 {{$newXP := dbIncr .User.ID "countevent" 1}}
-{{if gt (toInt $msg) 100}}
+{{end}}
+
+{{if gt (toInt $msg) 150}}
 	{{$gEmoji:=`👻`}}
 	{{$rEmoji:=reReplace `\A<|>\z` $gEmoji ""}}
 	{{$syntaxError:=0}}
