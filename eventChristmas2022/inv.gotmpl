@@ -1,0 +1,82 @@
+{{ $stringValue := 0 }} 
+{{ with dbGet .User.ID "stringValue" }}
+	{{ $stringValue = .Value }}
+{{ end }}
+
+{{if $stringValue}}
+{{else}}
+	{{dbSet .User.ID "stringValue" "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
+    {{ $stringValue =  "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
+{{end}}
+
+{{$res1 := ""}}
+{{$res2 := ""}}
+{{$res3 := ""}}
+{{$res4 := ""}}
+{{range $k, $v := (split $stringValue ",")}} 
+    {{if eq (toInt $k) 0}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:img101:1048431560652759080>"}}
+		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
+	{{else if eq (toInt $k) 1}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:img102:1048431564079501332>"}} 
+		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
+	{{else if eq (toInt $k) 2}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:img103:1048431567850176573>"}}
+		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
+	{{else if eq (toInt $k) 3}}
+        {{if eq $v "T"}} {{$res1 = joinStr "" $res1 "<:img104:1048431576205246465>"}}
+		{{else}} {{$res1 = joinStr "" $res1 "❔"}} {{end}}
+
+	{{else if eq (toInt $k) 4}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:img105:1048431581003526154>"}}
+		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
+	{{else if eq (toInt $k) 5}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:img106:1048431583511728209>"}} 
+		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
+	{{else if eq (toInt $k) 6}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:img107:1048431588314194021>"}}
+		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
+	{{else if eq (toInt $k) 7}}
+        {{if eq $v "T"}} {{$res2 = joinStr "" $res2 "<:img108:1048431592688857118>"}}
+		{{else}} {{$res2 = joinStr "" $res2 "❔"}} {{end}}
+  
+	{{else if eq (toInt $k) 8}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:img109:1048431596690210906>"}}
+		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
+	{{else if eq (toInt $k) 9}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:img110:1048431599190036590>"}} 
+		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
+	{{else if eq (toInt $k) 10}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:img111:1048431603086544896>"}}
+		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
+	{{else if eq (toInt $k) 11}}
+        {{if eq $v "T"}} {{$res3 = joinStr "" $res3 "<:img112:1048431606177734676>"}}
+		{{else}} {{$res3 = joinStr "" $res3 "❔"}} {{end}}
+	
+	{{else if eq (toInt $k) 12}}
+        {{if eq $v "T"}} {{$res4 = joinStr "" $res4 "<:img113:1048431609440915556>"}}
+		{{else}} {{$res4 = joinStr "" $res4 "❔"}} {{end}}
+	{{else if eq (toInt $k) 13}}
+        {{if eq $v "T"}} {{$res4 = joinStr "" $res4 "<:img114:1048431613681352714>"}} 
+		{{else}} {{$res4 = joinStr "" $res4 "❔"}} {{end}}
+	{{else if eq (toInt $k) 14}}
+        {{if eq $v "T"}} {{$res4 = joinStr "" $res4 "<:img115:1048431616378273793>"}}
+		{{else}} {{$res4 = joinStr "" $res4 "❔"}} {{end}}
+	{{else if eq (toInt $k) 15}}
+        {{if eq $v "T"}} {{$res4 = joinStr "" $res4 "<:img116:1048431620941692929>"}}
+		{{else}} {{$res4 = joinStr "" $res4 "❔"}} {{end}}
+
+    {{end}}
+{{end}}
+
+{{ $user := .User }} 
+{{ $color := 14232643 }} 
+{{ $avatar := (joinStr "" "https://cdn.discordapp.com/avatars/" (toString .User.ID) "/" .User.Avatar ".png") }}
+{{$embed := sdict
+	"title" (joinStr "" "❯ Bức tranh của "  .User.Username) 
+	"color" $color
+	"description" (print $res1 "\n" $res2 "\n" $res3 "\n" $res4)
+	"thumbnail" (sdict "url" $avatar) 
+}}
+
+{{ sendMessage nil (cembed $embed) }}

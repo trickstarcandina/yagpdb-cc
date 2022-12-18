@@ -1,0 +1,67 @@
+{{/* 
+<:img101:1048431560652759080><:img102:1048431564079501332><:img103:1048431567850176573><:img104:1048431576205246465> 
+<:img105:1048431581003526154><:img106:1048431583511728209><:img107:1048431588314194021><:img108:1048431592688857118> 
+<:img109:1048431596690210906><:img110:1048431599190036590><:img111:1048431603086544896><:img112:1048431606177734676> 
+<:img113:1048431609440915556><:img114:1048431613681352714><:img115:1048431616378273793><:img116:1048431620941692929> 
+*/}}
+{{ $totalticket := 0 }} 
+{{ with dbGet .User.ID "countticket" }}
+	{{ $totalticket = .Value }}
+{{ end }}
+
+{{ $stringValue := 0 }} 
+{{ with dbGet .User.ID "stringValue" }}
+	{{ $stringValue = .Value }}
+{{ end }}
+
+{{if $stringValue}}
+{{else}}
+	{{dbSet .User.ID "stringValue" "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
+    {{ $stringValue =  "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
+{{end}}
+
+{{if gt (toInt $totalticket) 0}}
+    {{$map := dict
+        0 "<:img101:1048431560652759080>"
+        1 "<:img102:1048431564079501332>"
+        2 "<:img103:1048431567850176573>"
+        3 "<:img104:1048431576205246465>"
+        4 "<:img105:1048431581003526154>"
+        5 "<:img106:1048431583511728209>"
+        6 "<:img107:1048431588314194021>"
+        7 "<:img108:1048431592688857118>"
+        8 "<:img109:1048431596690210906>"
+        9 "<:img110:1048431599190036590>"
+        10 "<:img111:1048431603086544896>"
+        11 "<:img112:1048431606177734676>"
+        12 "<:img113:1048431609440915556>"
+        13 "<:img114:1048431613681352714>"
+        14 "<:img115:1048431616378273793>"
+        15 "<:img116:1048431620941692929>"
+    }}
+    {{$d := randInt 16}} 
+    {{$res := $map.Get $d}} 
+    {{/* {{$a := dbIncr .User.ID $res 1}} */}}
+
+    {{$res_string := ""}}
+    {{range $k, $v := (split $stringValue ",")}} 
+        {{if eq (toInt $k) $d}}
+            {{$res_string = joinStr "," $res_string "T"}}
+        {{else}}
+            {{$res_string = joinStr "," $res_string $v}}
+        {{end}}
+    {{end}}
+    {{dbSet .User.ID "stringValue" $res_string}}
+
+    {{$res}} là mảnh ghép {{.User.Mention}} nhận được. Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt mở.
+    {{/* {{if eq $d 0}}
+        {{sendMessage nil (printf "<:banhchung:936952715630760016>")}} 
+        {{$a := dbIncr .User.ID "banhchung" 1}}
+    {{else if eq $d 1}}
+        {{sendMessage nil (printf "<:banhtet:936952714565402634>")}}
+        {{$a := dbIncr .User.ID "banhtet" 1}}
+    {{end}} */}}
+    
+{{else}}
+    Bạn đã hết số lượt.
+{{end}}
