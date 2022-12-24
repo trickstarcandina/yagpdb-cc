@@ -1,0 +1,28 @@
+{{$map := dict
+    0 "Bạn nhận được 100k owo"
+    1 "Bạn nhận được thêm 1 lượt mở"
+    2 "Bạn nhận được thêm 2 lượt mở"
+    3 "Bạn nhận được thêm 3 lượt mở"
+    4 "Bạn nhận được 200k owo"
+    5 "Bạn nhận được thêm 5 lượt mở"
+    6 "Bạn nhận được 50k owo"
+    7 "Chúc bạn giáng sinh vui vẻ"
+}}
+
+{{$d := randInt 8}}
+
+{{$res := $map.Get $d}}
+
+
+{{$msgEmbed := cembed 
+    "image" (sdict "url" "https://cdn.discordapp.com/attachments/1054735263445819422/1055080599083298886/a7576d88a48247c6bf47f843b764bc22.gif")  
+    "color" 16763904	
+}}
+
+{{sendMessage nil $msgEmbed}}
+
+{{.User.Mention}} {{$res}}
+
+{{if or (eq $d 1) (eq $d 2) (eq $d 3) (eq $d 5)}}
+    {{$a := dbIncr .User.ID "countticket" $d}}
+{{end}}
