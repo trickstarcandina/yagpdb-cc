@@ -1,0 +1,134 @@
+{{/* 
+<:dice1:1019933441296453642> 
+<:dice2:1019933454894370847>
+<:dice3:1019933466718130186>
+<:dice4:1019933477572988938>
+<:dice5:1019933496342478848>
+<:dice6:1019933510049476639>
+*/}}
+{{$channel := 922790092853084160}}
+{{$user := .User.Mention}}
+
+{{ $totalticket := 0 }} 
+{{ with dbGet .User.ID "countticket" }}
+	{{ $totalticket = .Value }}
+{{ end }}
+
+{{ $currentpos := 0 }} 
+{{ with dbGet .User.ID "currentpos" }}
+	{{ $currentpos = .Value }}
+{{ end }}
+{{if $currentpos}}
+{{else}}
+	{{dbSet .User.ID "currentpos" (toInt 0)}}
+    {{ $currentpos = (toInt 0)}}
+{{end}}
+
+{{/* 
+key 
+- "countticket"s
+- "countevent"
+- "eventdaily"
+- "checkfull"
+
+- "currentpos"
+- "countallevent"
+
+
+4, 26, 77, 97 : Móc mạnh lên, được ( 1-80% / 2 -20% ) quả thông rồi, thu thập thêm để đổi quà nhé ! 
+7, 32, 69, 86 : Hộp quà*
+16 : Bão tuyết cuốn bạn đến ô 20 rồi, thích thật ! 
+20 : Bão tuyết cuốn bạn đến ô 16 rồi, thích thật ! 
+18, 56 : Nhặt được đôi vớ, phải làm nhiệm vụ để vượt qua nha, nhiệm vụ lần này : 
+    Lên ⁠🎀┊thời-sự gửi lời chào ( 25% ) / 
+    Lên ⁠💫┊share chia sẻ 1 tấm hình bạn thấy vui ( 50% ) / 
+    Treo Voice 15 phút tại Server ( 25% )
+27 : Merry Christmas ! 
+28, 96 : Nhắc bạn : Vào #rung-chuông nhận quà nhé ! 
+41, 72 : Chúc mừng bạn nhặt được 2 quả thông trên đường đi
+45 : Chúc mừng bạn luồn qua ống khói đến được ô 61
+48, 91 : Chúc mừng bạn nhận thêm 1 xí ngầu ❤️ 
+51 : Chúc mừng bạn nhặt được 1 quả thông trên đường đi
+58 : Hố đen đưa bạn đến ô 64 rồi, thích thật ! 
+64 : Hố đen đưa bạn đến ô 58 rồi, thích thật ! 
+
+16 <-> 20
+45 -> 61
+58 <-> 64
+
+*/}}
+
+{{if gt (toInt $totalticket) 0}}
+    {{$rand1 := randInt 6}}
+    {{$pos := dbIncr .User.ID "currentpos" $rand1}}
+    {{$m := dbIncr .User.ID "countallevent" $rand1}}
+    {{if eq $rand1 0}}
+        {{sendMessage nil (printf "<:dice1:1019933441296453642>")}}
+    {{else if eq $rand1 1}}
+        {{sendMessage nil (printf "<:dice2:1019933454894370847>")}}
+    {{else if eq $rand1 2}}
+        {{sendMessage nil (printf "<:dice3:1019933466718130186>")}}
+    {{else if eq $rand1 3}}
+        {{sendMessage nil (printf "<:dice4:1019933477572988938>")}}
+    {{else if eq $rand1 4}}
+        {{sendMessage nil (printf "<:dice5:1019933496342478848>")}}
+    {{else if eq $rand1 5}}
+        {{sendMessage nil (printf "<:dice6:1019933510049476639>")}}
+    {{else}}
+        {{sendMessage nil (printf "Bạn đã bị 👻 lấy cắp xúc sắc.")}}
+    {{end}}
+    {{$countxucsac := dbIncr .User.ID "countticket" -1}}
+    {{sendMessage nil (print $user " bạn đã đến ô " $pos ". Bạn còn " $countxucsac " xúc sắc.")}}
+
+
+    {{if eq (toInt $pos) 16}}
+        {{.User.Mention}} Ô 16 là ô đặc biệt. Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 4}}
+    {{else if eq (toInt $pos) 20}}
+        {{.User.Mention}} Ô 20 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -4}}
+    {{else if eq (toInt $pos) 45}}
+        {{.User.Mention}} Ô 45 là ô đặc biệt. Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 16}}
+    {{else if eq (toInt $pos) 58}}
+        {{.User.Mention}} Ô 58 là ô đặc biệt. Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 6}}
+    {{else if eq (toInt $pos) 64}}
+        {{.User.Mention}} Ô 64 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -6}}
+
+    {{/*
+    TODO
+    */}}
+    {{else if eq (toInt $pos) 19}}
+        {{$rand2 := randInt 6}}
+        {{if eq $rand2 1}}
+            {{.User.Mention}} Bạn bị mất 3 xúc sắc. Bạn còn {{dbIncr .User.ID "countticket" -3}} xúc sắc. 
+        {{else if eq $rand2 2}}
+            {{.User.Mention}} Bạn nhận được thêm 2 xúc sắc. Bạn có {{dbIncr .User.ID "countticket" 2}} xúc sắc. 
+        {{else if eq $rand2 3}}
+            {{.User.Mention}} Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 12}}
+        {{else}}
+            {{.User.Mention}} Lên <#763256876741427241> thả thính <@662508642251309057> hoặc là bạn sẽ mất hết quà.
+        {{end}}
+    {{else if eq (toInt $pos) 30}}
+        {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 30 và nhận được 20.000 OwO và role Noel.")}}
+    {{else if eq (toInt $pos) 55}}
+        {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 55 và nhận được 50.000 OwO.")}}
+    {{else if eq (toInt $pos) 85}}
+        {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 85 và nhận được 80.000 OwO.")}}
+    {{else if eq (toInt $pos) 100}}
+        {{$rand2 := randInt 10}}
+        {{if eq $rand2 1}}
+            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 500.000 OwO.")}}
+        {{else if eq $rand2 2}}
+            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 200.000 OwO.")}}  
+        {{else}}
+            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 100.000 OwO.")}}  
+        {{end}}
+    {{else if gt (toInt $pos) 100}}
+        {{/* reset */}}
+        Đã hết vòng bạn đi tới tiếp ô {{dbIncr .User.ID "currentpos" -100}}
+        {{sendMessage $channel (print "Chúc mừng " $user " đã hoàn thành vòng đua và nhận được 100.000 OwO.")}}  
+    {{else if eq (toInt $pos) 9}}
+        Chúc mừng bạn nhận món quà đặc biệt là một lời chúc mừng giáng sinh thật ý nghĩa từ TV {{.User.Mention}}.
+    {{end}}
+
+{{else}}
+    {{.User.Mention}} Bạn đã hết lượt chơi. Hãy làm thêm nhiệm vụ ( xem tại ghim ) để kiếm lượt nhé.
+{{end}}
