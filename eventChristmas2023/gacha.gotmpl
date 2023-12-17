@@ -7,7 +7,7 @@
 <:dice6:1019933510049476639>
 */}}
 {{/* channel nhận thưởng*/}}
-{{$channel := 922790092853084160}}
+{{$channel := 763278963601702933}}
 {{$user := .User.Mention}}
 
 {{ $totalticket := 0 }} 
@@ -60,7 +60,8 @@
     {{else if eq (toInt $pos) 64}}
         {{.User.Mention}} Ô 64 là ô đặc biệt. Bạn lọt xuống ô {{dbIncr .User.ID "currentpos" -6}}
 
-    {{else if or (eq (toInt $pos) 4) (eq (toInt $pos) 26) (eq (toInt $pos) 77) (eq (toInt $pos) 97)}}
+    {{/* (eq (toInt $pos) 4) */}}
+    {{else if or (eq (toInt $pos) 26) (eq (toInt $pos) 77) (eq (toInt $pos) 97)}}
         {{$rand2 := randInt 4}}
         {{if eq $rand2 0}}
             {{.User.Mention}} Bạn nhận được 2 quả thông. Bạn có {{dbIncr .User.ID "countpineal" 2}} quả thông.
@@ -90,46 +91,31 @@
     {{else if or (eq (toInt $pos) 48) (eq (toInt $pos) 91)}}
         {{.User.Mention}} Chúc mừng bạn nhận thêm 1 xí ngầu ❤️. Bạn có {{dbIncr .User.ID "countticket" 1}} xí ngầu.
 
+    {{else if or (eq (toInt $pos) 28) (eq (toInt $pos) 96)}}
+        {{.User.Mention}} Nhắc bạn : Vào <#763278963601702933> nhận quà nhé ! 
+
+    {{else if or (eq (toInt $pos) 7) (eq (toInt $pos) 32) (eq (toInt $pos) 69) (eq (toInt $pos) 86)}}
+        {{$rand3 := randInt 20}}
+        {{if le $rand3 1}}
+            {{sendMessage $channel (print "Chúc mừng " $user " mở quà được 20.000 OwO.")}}
+        {{else if eq $rand3 2}}
+            {{sendMessage $channel (print "Chúc mừng " $user " mở quà được 50.000 OwO.")}}
+        {{else if le $rand3 6}}
+            {{.User.Mention}} Hộp này hết quà rồi, tìm hộp khác nha.
+        {{else if le $rand3 8}}
+            {{.User.Mention}} Bạn đã thu thập thêm được 2 quả thông. Bạn có {{dbIncr .User.ID "countpineal" 2}} quả thông.
+        {{else if le $rand3 12}}
+            {{.User.Mention}} Bạn đã thu thập thêm được 1 quả thông. Bạn có {{dbIncr .User.ID "countpineal" 1}} quả thông.
+        {{else if le $rand3 16}}
+            {{.User.Mention}} Chúc mừng bạn nhận được thêm 1 xí ngầu. Bạn có {{dbIncr .User.ID "countticket" 1}} xí ngầu.
+        {{else if le $rand3 19}}
+            {{.User.Mention}} Chúc mừng bạn nhận được Role Merry Christmas ! Cùng đón Giáng sinh thôi nào !
+            {{giveRoleID .User.ID 1185779412101247097}}
+        {{end}}
+
     {{else if gt (toInt $pos) 100}}
         Đã hết vòng bạn đi tới tiếp ô {{dbIncr .User.ID "currentpos" -100}}
 
-    {{end}}
-
-    {{/*
-    TODO
-    */}}
-    {{else if eq (toInt $pos) 19}}
-        {{$rand2 := randInt 6}}
-        {{if eq $rand2 1}}
-            {{.User.Mention}} Bạn bị mất 3 xúc sắc. Bạn còn {{dbIncr .User.ID "countticket" -3}} xúc sắc. 
-        {{else if eq $rand2 2}}
-            {{.User.Mention}} Bạn nhận được thêm 2 xúc sắc. Bạn có {{dbIncr .User.ID "countticket" 2}} xúc sắc. 
-        {{else if eq $rand2 3}}
-            {{.User.Mention}} Bạn nhảy lên ô {{dbIncr .User.ID "currentpos" 12}}
-        {{else}}
-            {{.User.Mention}} Lên <#763256876741427241> thả thính <@662508642251309057> hoặc là bạn sẽ mất hết quà.
-        {{end}}
-    {{else if eq (toInt $pos) 30}}
-        {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 30 và nhận được 20.000 OwO và role Noel.")}}
-    {{else if eq (toInt $pos) 55}}
-        {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 55 và nhận được 50.000 OwO.")}}
-    {{else if eq (toInt $pos) 85}}
-        {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 85 và nhận được 80.000 OwO.")}}
-    {{else if eq (toInt $pos) 100}}
-        {{$rand2 := randInt 10}}
-        {{if eq $rand2 1}}
-            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 500.000 OwO.")}}
-        {{else if eq $rand2 2}}
-            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 200.000 OwO.")}}  
-        {{else}}
-            {{sendMessage $channel (print "Chúc mừng " $user " đã đến ô 100 và nhận được 100.000 OwO.")}}  
-        {{end}}
-    {{else if gt (toInt $pos) 100}}
-        {{/* reset */}}
-        Đã hết vòng bạn đi tới tiếp ô {{dbIncr .User.ID "currentpos" -100}}
-        {{sendMessage $channel (print "Chúc mừng " $user " đã hoàn thành vòng đua và nhận được 100.000 OwO.")}}  
-    {{else if eq (toInt $pos) 9}}
-        Chúc mừng bạn nhận món quà đặc biệt là một lời chúc mừng giáng sinh thật ý nghĩa từ TV {{.User.Mention}}.
     {{end}}
 
 {{else}}

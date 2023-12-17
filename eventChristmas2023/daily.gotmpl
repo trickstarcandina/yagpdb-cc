@@ -9,9 +9,9 @@
 {{ end }}
 
 {{if eq (toInt $daily) 0}}
-{{ $b := dbIncr .User.ID "eventdaily" 1 }}
-{{ $s := dbIncr .User.ID "countticket" 3 }}
-{{.User.Mention}} Chúc mừng bạn nhận 3 lượt mở ngày hôm nay, bạn đang có {{$s}} lượt, mở bằng lệnh -open.
+	{{ $b := dbIncr .User.ID "eventdaily" 1 }}
+	{{ $s := dbIncr .User.ID "countticket" 2 }}
+	{{.User.Mention}} Chúc mừng bạn nhận 2 lượt mở ngày hôm nay, bạn đang có {{$s}} lượt, mở bằng lệnh -lac.
 {{else}}
-{{.User.Mention}} đã điểm danh hôm nay. Sau 19h quay lại nhé.
+	{{.User.Mention}} đã điểm danh hôm nay. Sau 19h quay lại nhé.
 {{end}}
