@@ -1,5 +1,5 @@
 currentpos -> vị trí
-countticket -> đếm số xúc sắc
+countticket -> đếm số xí ngầu
 countpineal -> đếm số thông
 
 countevent -> đếm msg

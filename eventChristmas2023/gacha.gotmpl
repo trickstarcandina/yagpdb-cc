@@ -7,7 +7,7 @@
 <:dice6:1019933510049476639>
 */}}
 {{/* channel nhận thưởng*/}}
-{{$channel := 763278963601702933}}
+{{$channel := 1185911919912165436}}
 {{$user := .User.Mention}}
 
 {{ $totalticket := 0 }} 
@@ -42,7 +42,7 @@
         {{sendMessage nil (printf "<:dice6:1019933510049476639>")}}
     {{end}}
     {{$countxucsac := dbIncr .User.ID "countticket" -1}}
-    {{sendMessage nil (print $user " bạn đã đến ô " $pos ". Bạn còn " $countxucsac " xúc sắc.")}}
+    {{sendMessage nil (print $user " bạn đã đến ô " $pos ". Bạn còn " $countxucsac " xí ngầu 🎲.")}}
 
 
     {{if eq (toInt $pos) 16}}
@@ -89,10 +89,10 @@
         {{.User.Mention}} Chúc mừng bạn nhặt được 2 quả thông trên đường đi. Bạn có {{dbIncr .User.ID "countpineal" 2}} quả thông.
 
     {{else if or (eq (toInt $pos) 48) (eq (toInt $pos) 91)}}
-        {{.User.Mention}} Chúc mừng bạn nhận thêm 1 xí ngầu ❤️. Bạn có {{dbIncr .User.ID "countticket" 1}} xí ngầu.
+        {{.User.Mention}} Chúc mừng bạn nhận thêm 1 xí ngầu 🎲. Bạn có {{dbIncr .User.ID "countticket" 1}} xí ngầu 🎲.
 
     {{else if or (eq (toInt $pos) 28) (eq (toInt $pos) 96)}}
-        {{.User.Mention}} Nhắc bạn : Vào <#763278963601702933> nhận quà nhé ! 
+        {{.User.Mention}} Nhắc bạn : Vào <#1185865493580628018> nhận quà nhé ! 
 
     {{else if or (eq (toInt $pos) 7) (eq (toInt $pos) 32) (eq (toInt $pos) 69) (eq (toInt $pos) 86)}}
         {{$rand3 := randInt 20}}
@@ -107,7 +107,7 @@
         {{else if le $rand3 12}}
             {{.User.Mention}} Bạn đã thu thập thêm được 1 quả thông. Bạn có {{dbIncr .User.ID "countpineal" 1}} quả thông.
         {{else if le $rand3 16}}
-            {{.User.Mention}} Chúc mừng bạn nhận được thêm 1 xí ngầu. Bạn có {{dbIncr .User.ID "countticket" 1}} xí ngầu.
+            {{.User.Mention}} Chúc mừng bạn nhận được thêm 1 xí ngầu 🎲. Bạn có {{dbIncr .User.ID "countticket" 1}} xí ngầu 🎲.
         {{else if le $rand3 19}}
             {{.User.Mention}} Chúc mừng bạn nhận được Role Merry Christmas ! Cùng đón Giáng sinh thôi nào !
             {{giveRoleID .User.ID 1185779412101247097}}
