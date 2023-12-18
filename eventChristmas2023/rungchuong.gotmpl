@@ -1,0 +1,33 @@
+{{$channel := 1185911919912165436}}
+{{$user := .User.Mention}}
+{{$d := randInt 10}}
+
+{{if eq $d 0}}
+    {{sendMessage nil (printf "Chúc mừng bạn nhận được 1.000.000 owo <:owone:903840830006116402>, nhưng bị rơi mất hẹn lần khác nhé")}}
+
+{{else if eq $d 1}}
+    {{sendMessage nil (printf "Noel không có bồ đòi trúng quà, có cái nịt")}}
+
+{{else if eq $d 2}}
+    {{sendMessage nil (printf "Hẹn mai trúng nhé hihi")}}
+
+{{else if or (eq $d 3) (eq $d 4)}}
+    {{$a := dbIncr .User.ID "countticket" 1}}
+    {{sendMessage nil (printf "Chúc mừng bạn nhận được 1 xí ngầu 🎲, mở nó tại <#1075423358201626734> nhé")}}
+
+{{else if eq $d 5}}
+    {{$b := dbIncr .User.ID "countticket" 2}}
+    {{sendMessage nil (printf "Chúc mừng bạn nhận được 2 xí ngầu 🎲, mở nó tại <#1075423358201626734> nhé")}}
+
+{{else if or (eq $d 6) (eq $d 7)}}
+    {{sendMessage nil (printf "Chúc mừng bạn nhận được 30.000 owo <:owone:903840830006116402>")}}
+    {{sendMessage $channel (print "Chúc mừng " $user " mở quà được 30.000 OwO.")}}
+
+{{else if eq $d 8}}
+    {{sendMessage nil (printf "Chúc mừng bạn nhận được 100.000 owo <:owone:903840830006116402>")}}
+    {{sendMessage $channel (print "Chúc mừng " $user " mở quà được 100.000 OwO.")}}
+
+{{else if eq $d 9}}
+    {{sendMessage nil (printf "Bạn nhận được tình cảm to lớn từ Server")}}
+
+{{end}}
