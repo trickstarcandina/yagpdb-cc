@@ -1,0 +1,19 @@
+{{ $count := 0 }} 
+{{ with dbGet .User.ID "countpineal" }}
+	{{ $count = .Value }}
+{{ end }}
+
+
+{{ $user := .User }} 
+{{ $color := 14232643 }} 
+{{ $avatar := (joinStr "" "https://cdn.discordapp.com/avatars/" (toString .User.ID) "/" .User.Avatar ".png") }}
+{{$embed := sdict
+	"title" (joinStr "" "❯ Kho đồ của "  .User.Username "!") 
+	"color" $color
+	"fields" (cslice 
+        (sdict "name" "🌰🎄" "value" (toString (toInt $count)) "inline" true)
+    ) 
+	"thumbnail" (sdict "url" $avatar) 
+}}
+
+{{ sendMessage nil (cembed $embed) }}
