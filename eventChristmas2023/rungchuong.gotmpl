@@ -15,17 +15,24 @@
     {{$a := dbIncr .User.ID "countticket" 1}}
     {{sendMessage nil (printf "Chúc mừng bạn nhận được 1 xí ngầu 🎲, mở nó tại <#1075423358201626734> nhé")}}
 
-{{else if eq $d 5}}
+{{else if or (eq $d 5) (eq $d 6)}}
     {{$b := dbIncr .User.ID "countticket" 2}}
     {{sendMessage nil (printf "Chúc mừng bạn nhận được 2 xí ngầu 🎲, mở nó tại <#1075423358201626734> nhé")}}
 
-{{else if or (eq $d 6) (eq $d 7)}}
-    {{sendMessage nil (printf "Chúc mừng bạn nhận được 30.000 owo <:owone:903840830006116402>")}}
-    {{sendMessage $channel (print "Chúc mừng " $user " mở quà được 30.000 OwO.")}}
+{{else if eq $d 7}}
+    Bạn đã thu thập thêm được 1 quả thông. Bạn có {{dbIncr .User.ID "countpineal" 1}} quả thông.
 
 {{else if eq $d 8}}
-    {{sendMessage nil (printf "Chúc mừng bạn nhận được 100.000 owo <:owone:903840830006116402>")}}
-    {{sendMessage $channel (print "Chúc mừng " $user " mở quà được 100.000 OwO.")}}
+    {{$da := randInt 3}}
+    {{if eq $da 0}}
+        {{sendMessage nil (printf "Chúc mừng bạn nhận được 100.000 owo <:owone:903840830006116402>")}}
+        {{sendMessage $channel (print "Chúc mừng " $user " mở quà được 100.000 OwO.")}}
+    {{else if eq $da 1}}
+        {{sendMessage nil (printf "Chúc mừng bạn nhận được 30.000 owo <:owone:903840830006116402>")}}
+        {{sendMessage $channel (print "Chúc mừng " $user " mở quà được 30.000 OwO.")}}
+    {{else}}
+        Bạn đã thu thập thêm được 2 quả thông. Bạn có {{dbIncr .User.ID "countpineal" 2}} quả thông.
+    {{end}}
 
 {{else if eq $d 9}}
     {{sendMessage nil (printf "Bạn nhận được tình cảm to lớn từ Server")}}
