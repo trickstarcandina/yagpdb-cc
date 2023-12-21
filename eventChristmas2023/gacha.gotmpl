@@ -8,6 +8,7 @@
 */}}
 {{/* channel nhận thưởng*/}}
 {{$channel := 1185911919912165436}}
+{{$channel2 := 1187293637948751952}}
 {{$user := .User.Mention}}
 
 {{ $totalticket := 0 }} 
@@ -115,6 +116,7 @@
 
     {{else if gt (toInt $pos) 100}}
         Đã hết vòng bạn đi tới tiếp ô {{dbIncr .User.ID "currentpos" -100}}
+        {{sendMessage $channel2 (print "Chúc mừng " $user " đã đi hết vòng.")}}
 
     {{end}}
 
