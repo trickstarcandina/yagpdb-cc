@@ -1,0 +1,24 @@
+{{ $page := 1 }} 
+{{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }}
+{{ $nextTo := mult (sub $page 1) 10 }} 
+{{ $users := dbTopEntries "countcake" 10 $nextTo }} 
+{{ if not (len $users) }}
+	Không có ai ở trang này :(
+{{ else }}
+	{{ $rank := $nextTo }} 
+	{{ $display := "" }} 
+	{{- range $users -}}
+		{{ $xp := toInt .Value }}
+		{{ $rank = add $rank 1 }} 
+		{{ $display = printf "%s\n• **%d.** [%s](https://www.youtube.com/watch?v=9kaCAbIXuyg) :: Số lượng (%d 🥮)"
+			$display $rank .User.String $xp
+		}} 
+	{{- end -}}
+	{{ $id := sendMessageRetID nil (cembed
+		"title" "❯ Bảng xếp hạng"
+		"thumbnail" (sdict "url" "https://lh3.googleusercontent.com/proxy/tWDSXoLnEbYTVEJSUdaG_9mzKSa1UjE-ydVqyLBGTsM049cHCsHxjhq12JblD-lmff-HNsI0kFojtO7wOUZ5UtP__XZonq7wXWjMwRyRBGBZCS8i4wQsxy7ooLy-ETpRLyYVgBm0ReSFVRwcoI9IbuFi2GzU-nBC14AzhovAfyCKna0jV4aPt7cfmtq1KK15QmbJm7y-ENzd")
+		"color" 14232643
+		"description" $display
+		"footer" (sdict "text" (joinStr "" "Trang " $page))) 
+	}} 
+{{end}}

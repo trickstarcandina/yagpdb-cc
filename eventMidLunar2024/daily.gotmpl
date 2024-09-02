@@ -1,0 +1,17 @@
+{{ $totalticket := 0 }} 
+{{ with dbGet .User.ID "countticket" }}
+	{{ $totalticket = .Value }}
+{{ end }}
+
+{{ $daily := 0 }} 
+{{ with dbGet .User.ID "moondaily" }}
+	{{ $daily = .Value }}
+{{ end }}
+
+{{if eq (toInt $daily) 0}}
+{{ $b := dbIncr .User.ID "moondaily" 1 }}
+{{ $s := dbIncr .User.ID "countticket" 3 }}
+{{.User.Mention}} điểm danh thành công đã nhận được 3 hộp bánh, bạn đang có {{$s}} hộp, mở hộp bằng lệnh -open.
+{{else}}
+{{.User.Mention}} đã điểm danh hôm nay. Ngày mai hãy quay lại nhé. 
+{{end}}

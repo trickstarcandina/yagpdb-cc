@@ -1,0 +1,20 @@
+{{ $user := 0 }} 
+{{ $channel := 1034731615932383232}}
+{{ $timezone := "Asia/Ho_Chi_Minh" }} 
+{{ $now := currentTime.In (newDate 0 0 0 0 0 0 $timezone).Location }}
+{{ $time := $now.Format "3:04:05 PM" }}
+{{ with .CmdArgs }} {{ $user = index . 0 | userArg }} {{ end }} 
+
+{{ $soluong := (toInt $.nil) }}
+{{ $valid := false }}
+{{ with reFind `\A\d+\z` (index .CmdArgs 1) }} {{ $valid = true }} {{ $soluong = toInt . }} {{ end }}
+	{{ if and $valid $user }}
+        {{ $s := dbIncr $user.ID "countticket" $soluong }} 
+		{{ printf "Chúc mừng **%s** nhận đc %d hộp, đang có %d hộp!" $user.String $soluong (toInt $s) }}
+    {{end}}
+{{$msgEmbed := cembed 
+    "title" (joinStr "" $time)
+    "description" (joinStr "" .User.Mention " send to "  $user.Mention " value " $soluong)
+    "color" 16763904
+}}
+{{sendMessage $channel $msgEmbed}}

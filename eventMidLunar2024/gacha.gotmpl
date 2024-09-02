@@ -1,0 +1,60 @@
+{{ $totalticket := 0 }} 
+{{ with dbGet .User.ID "countticket" }}
+	{{ $totalticket = .Value }}
+{{ end }}
+
+{{ $stringValue := 0 }} 
+{{ with dbGet .User.ID "stringValue" }}
+	{{ $stringValue = .Value }}
+{{ end }}
+
+{{if $stringValue}}
+{{else}}
+	{{dbSet .User.ID "stringValue" "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
+    {{ $stringValue =  "F,F,F,F,F,F,F,F,F,F,F,F,F,F,F,F"}}
+{{end}}
+
+{{if gt (toInt $totalticket) 0}}
+    {{$map := dict
+        0 "<:01:1275756396108976180>"
+        1 "<:02:1275756400961654867>"
+        2 "<:03:1275756407257301092>"
+        3 "<:04:1275756412294922323>"
+        4 "<:05:1275756416254345347>"
+        5 "<:06:1275756419395883018>"
+        6 "<:07:1275756424672182312>"
+        7 "<:08:1275756429654888500>"
+        8 "<:09:1275756433513906176>"
+        9 "<:10:1275756438135898263>"
+        10 "<:11:1275756442464419922>"
+        11 "<:12:1275756447640191086>"
+        12 "<:13:1275756451037446195>"
+        13 "<:14:1275756454393024534>"
+        14 "<:15:1275756459250159667>"
+        15 "<:16:1275756461707890741>"
+    }}
+    {{$d := randInt 28}} 
+    {{$res := $map.Get $d}} 
+
+    {{if gt $d 15}}
+        Chúc bạn và gia đình một mùa Trung Thu thật vui vẻ, hạnh phúc và ấm áp.
+        Mong rằng ánh trăng rằm mang đến cho bạn niềm vui, sức khỏe dồi dào và thành công trong mọi lĩnh vực.
+        Chúc bạn có những giây phút sum vầy bên người thân và thưởng thức những chiếc bánh trung thu ngon tuyệt!
+    {{else}}
+        {{$res_string := ""}}
+        {{range $k, $v := (split $stringValue ",")}} 
+            {{if eq (toInt $k) $d}}
+                {{$res_string = joinStr "," $res_string "T"}}
+            {{else}}
+                {{$res_string = joinStr "," $res_string $v}}
+            {{end}}
+        {{end}}
+
+        {{dbSet .User.ID "stringValue" $res_string}}
+
+        {{$res}} là mảnh ghép {{.User.Mention}} nhận được. Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt mở.
+    {{end}}
+    
+{{else}}
+    Bạn đã hết số lượt.
+{{end}}
