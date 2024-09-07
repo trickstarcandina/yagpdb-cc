@@ -40,6 +40,7 @@
         Chúc bạn và gia đình một mùa Trung Thu thật vui vẻ, hạnh phúc và ấm áp.
         Mong rằng ánh trăng rằm mang đến cho bạn niềm vui, sức khỏe dồi dào và thành công trong mọi lĩnh vực.
         Chúc bạn có những giây phút sum vầy bên người thân và thưởng thức những chiếc bánh trung thu ngon tuyệt!
+        Bạn còn {{dbIncr .User.ID "countticket" -1}} lượt mở.
     {{else}}
         {{$res_string := ""}}
         {{range $k, $v := (split $stringValue ",")}} 
